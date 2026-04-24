@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<expedientes_medicos>
+    <paciente id="PAC-001">
+        <nombre>Juan Pérez Gómez</nombre>
+        <edad>45</edad>
+        <grupo_sanguineo>A+</grupo_sanguineo>
+        <visitas>
+            <visita>
+                <fecha>2023-10-15</fecha>
+                <motivo>Chequeo anual de rutina</motivo>
+                <medico>Dra. Martínez</medico>
+            </visita>
+            <visita>
+                <fecha>2024-01-20</fecha>
+                <motivo>Gripe estacional y fiebre</motivo>
+                <medico>Dr. Sánchez</medico>
+            </visita>
+        </visitas>
+    </paciente>
+
+    <paciente id="PAC-002">
+        <nombre>María Rodríguez López</nombre>
+        <edad>32</edad>
+        <grupo_sanguineo>O-</grupo_sanguineo>
+        <visitas>
+            <visita>
+                <fecha>2023-11-05</fecha>
+                <motivo>Esguince de tobillo izquierdo</motivo>
+                <medico>Dr. Castro (Traumatología)</medico>
+            </visita>
+            <visita>
+                <fecha>2023-11-20</fecha>
+                <motivo>Revisión de fisioterapia</motivo>
+                <medico>Dra. Beltrán</medico>
+            </visita>
+        </visitas>
+    </paciente>
+
+    <paciente id="PAC-003">
+        <nombre>Luis Morales Ruiz</nombre>
+        <edad>60</edad>
+        <grupo_sanguineo>B+</grupo_sanguineo>
+        <visitas>
+            <visita>
+                <fecha>2024-02-12</fecha>
+                <motivo>Control de tensión arterial</motivo>
+                <medico>Dra. Elena Soler</medico>
+            </visita>
+            <visita>
+                <fecha>2024-03-01</fecha>
+                <motivo>Renovación de medicación crónica</motivo>
+                <medico>Dra. Elena Soler</medico>
+            </visita>
+        </visitas>
+    </paciente>
+</expedientes_medicos>

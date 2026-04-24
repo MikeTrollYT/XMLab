@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalogo>
+    <producto id="P001" categoria="Electrónica">
+        <nombre>Smartphone Galaxy</nombre>
+        <precio>699.00</precio>
+        <stock>45</stock>
+    </producto>
+    
+    <producto id="P002" categoria="Hogar">
+        <nombre>Aspiradora Robot</nombre>
+        <precio>199.50</precio>
+        <stock>12</stock>
+    </producto>
+    
+    <producto id="P003" categoria="Libros">
+        <nombre>Manual de XML</nombre>
+        <precio>35.00</precio>
+        <stock>100</stock>
+    </producto>
+    
+    <producto id="P004" categoria="Deportes">
+        <nombre>Raqueta de Tenis</nombre>
+        <precio>120.00</precio>
+        <stock>8</stock>
+    </producto>
+</catalogo>

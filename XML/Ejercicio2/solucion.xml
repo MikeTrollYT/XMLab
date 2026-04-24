@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<biblioteca>
+    <libro>
+        <titulo>1984</titulo>
+        <autor>George Orwell</autor>
+        <anio>1949</anio>
+        <isbn>978-8499890944</isbn>
+        <genero>Distopía</genero>
+    </libro>
+    
+    <libro>
+        <titulo>Cien años de soledad</titulo>
+        <autor>Gabriel García Márquez</autor>
+        <anio>1967</anio>
+        <isbn>978-8439728398</isbn>
+        <genero>Realismo mágico</genero>
+    </libro>
+    
+    <libro>
+        <titulo>Dune</titulo>
+        <autor>Frank Herbert</autor>
+        <anio>1965</anio>
+        <isbn>978-8497596824</isbn>
+        <genero>Ciencia ficción</genero>
+    </libro>
+</biblioteca>

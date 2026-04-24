@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu>
+    <seccion tipo="entrantes">
+        <plato vegetariano="si">
+            <nombre>Ensalada Caprese</nombre>
+            <descripcion>Tomate de la huerta, mozzarella fresca y albahaca.</descripcion>
+            <precio>8.50</precio>
+        </plato>
+        <plato vegetariano="no">
+            <nombre>Croquetas de Jamón</nombre>
+            <descripcion>Croquetas caseras de jamón ibérico (6 unidades).</descripcion>
+            <precio>9.00</precio>
+        </plato>
+        <plato vegetariano="si">
+            <nombre>Hummus con pan pita</nombre>
+            <descripcion>Crema de garbanzos con pimentón dulce y aceite de oliva virgen extra.</descripcion>
+            <precio>7.50</precio>
+        </plato>
+    </seccion>
+    
+    <seccion tipo="principales">
+        <plato vegetariano="no">
+            <nombre>Entrecot a la parrilla</nombre>
+            <descripcion>Entrecot de ternera (300g) con guarnición de patatas panaderas.</descripcion>
+            <precio>18.00</precio>
+        </plato>
+        <plato vegetariano="no">
+            <nombre>Salmón al horno</nombre>
+            <descripcion>Lomo de salmón noruego acompañado de verduras de temporada.</descripcion>
+            <precio>15.50</precio>
+        </plato>
+        <plato vegetariano="si">
+            <nombre>Risotto de Setas</nombre>
+            <descripcion>Arroz cremoso con variedad de setas silvestres y queso parmesano.</descripcion>
+            <precio>13.00</precio>
+        </plato>
+    </seccion>
+</menu>

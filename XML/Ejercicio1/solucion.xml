@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directorio>
+    <persona>
+        <nombre>Ana</nombre>
+        <apellidos>García López</apellidos>
+        <email>ana.garcia@ejemplo.com</email>
+        <telefono>600123456</telefono>
+    </persona>
+    
+    <persona>
+        <nombre>Carlos</nombre>
+        <apellidos>Ruiz Sánchez</apellidos>
+        <email>carlos.ruiz@ejemplo.com</email>
+        <telefono>611987654</telefono>
+    </persona>
+    
+    <persona>
+        <nombre>Laura</nombre>
+        <apellidos>Martínez Gómez</apellidos>
+        <email>laura.martinez@ejemplo.com</email>
+        <telefono>622456789</telefono>
+    </persona>
+</directorio>

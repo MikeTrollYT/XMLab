@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<empresa>
+    <departamento id="D001">
+        <empleado>
+            <nombre>Carlos Mendoza</nombre>
+            <cargo>Desarrollador Backend</cargo>
+            <salario>35000</salario>
+        </empleado>
+        <empleado>
+            <nombre>Ana Jiménez</nombre>
+            <cargo>Analista de Datos</cargo>
+            <salario>32000</salario>
+        </empleado>
+    </departamento>
+    
+    <departamento id="D002">
+        <empleado>
+            <nombre>Laura Ortiz</nombre>
+            <cargo>Directora de Marketing</cargo>
+            <salario>45000</salario>
+        </empleado>
+        <empleado>
+            <nombre>David Ruiz</nombre>
+            <cargo>Especialista SEO</cargo>
+            <salario>28000</salario>
+        </empleado>
+    </departamento>
+    
+    <departamento id="D003">
+        <empleado>
+            <nombre>Elena Navarro</nombre>
+            <cargo>Gerente de RRHH</cargo>
+            <salario>40000</salario>
+        </empleado>
+        <empleado>
+            <nombre>Javier Blanco</nombre>
+            <cargo>Técnico de Selección</cargo>
+            <salario>26000</salario>
+        </empleado>
+    </departamento>
+</empresa>

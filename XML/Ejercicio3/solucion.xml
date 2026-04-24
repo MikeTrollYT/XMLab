@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<centro_educativo>
+    <alumno>
+        <nombre>Lucía</nombre>
+        <apellidos>Fernández Ruiz</apellidos>
+        <curso>1º Bachillerato</curso>
+        <asignaturas>
+            <asignatura>
+                <nombre>Matemáticas</nombre>
+                <nota>8.5</nota>
+            </asignatura>
+            <asignatura>
+                <nombre>Física</nombre>
+                <nota>7.0</nota>
+            </asignatura>
+        </asignaturas>
+    </alumno>
+    
+    <alumno>
+        <nombre>Marcos</nombre>
+        <apellidos>Díaz Gómez</apellidos>
+        <curso>4º ESO</curso>
+        <asignaturas>
+            <asignatura>
+                <nombre>Historia</nombre>
+                <nota>9.0</nota>
+            </asignatura>
+            <asignatura>
+                <nombre>Inglés</nombre>
+                <nota>6.5</nota>
+            </asignatura>
+        </asignaturas>
+    </alumno>
+    
+    <alumno>
+        <nombre>Elena</nombre>
+        <apellidos>Martín Torres</apellidos>
+        <curso>2º Bachillerato</curso>
+        <asignaturas>
+            <asignatura>
+                <nombre>Biología</nombre>
+                <nota>10</nota>
+            </asignatura>
+            <asignatura>
+                <nombre>Química</nombre>
+                <nota>8.0</nota>
+            </asignatura>
+        </asignaturas>
+    </alumno>
+</centro_educativo>

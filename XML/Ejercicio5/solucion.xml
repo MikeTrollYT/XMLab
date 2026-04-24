@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inventario>
+    <articulo>
+        <nombre>Teclado Mecánico</nombre>
+        <cantidad>25</cantidad>
+        <agotado />
+    </articulo>
+    
+    <articulo>
+        <nombre>Monitor 27 pulgadas</nombre>
+        <cantidad>0</cantidad>
+        <agotado />
+    </articulo>
+    
+    <articulo>
+        <nombre>Ratón Inalámbrico</nombre>
+        <cantidad>12</cantidad>
+        <agotado />
+    </articulo>
+</inventario>
