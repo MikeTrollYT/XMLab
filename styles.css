@@ -382,6 +382,13 @@ main {
     gap: 14px;
 }
 
+.work-area {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    gap: 14px;
+}
+
 .source-panel {
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -437,6 +444,74 @@ main {
     flex-direction: column;
     background: var(--surface);
     min-height: 0;
+}
+
+.xpath-result-panel {
+    width: 320px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex-shrink: 0;
+}
+
+.xpath-result-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .4px;
+}
+
+.xpath-result-count {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.xpath-result-body {
+    margin: 0;
+    padding: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--text-dim);
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    flex: 1;
+}
+
+.xpath-result-body::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.xpath-result-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.xpath-result-body::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+}
+
+@media (max-width: 1100px) {
+    .work-area {
+        flex-direction: column;
+    }
+
+    .xpath-result-panel {
+        width: 100%;
+        max-height: 220px;
+    }
 }
 
 .editor-topbar {

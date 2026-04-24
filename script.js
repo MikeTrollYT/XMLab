@@ -5,11 +5,13 @@ let currentIdx = 0;
 const solvedBySection = {
   xml: new Set(JSON.parse(localStorage.getItem('xml_solved') || '[]')),
   xsd: new Set(JSON.parse(localStorage.getItem('xsd_solved') || '[]')),
+  xpath: new Set(JSON.parse(localStorage.getItem('xpath_solved') || '[]')),
 };
 
 const userCodeBySection = {
   xml: {},
   xsd: {},
+  xpath: {},
 };
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
@@ -22,7 +24,13 @@ function init() {
 }
 
 function getActiveExercises() {
-  return currentSection === 'xsd' ? xsdExercises : exercises;
+  if (currentSection === 'xsd') {
+    return xsdExercises;
+  }
+  if (currentSection === 'xpath') {
+    return xpathExercises;
+  }
+  return exercises;
 }
 
 function getActiveSolvedSet() {
@@ -34,29 +42,46 @@ function persistSolved(section) {
 }
 
 function getEditorExtension() {
-  return currentSection === 'xsd' ? 'xsd' : 'xml';
+  if (currentSection === 'xsd') {
+    return 'xsd';
+  }
+  if (currentSection === 'xpath') {
+    return 'xpath';
+  }
+  return 'xml';
 }
 
 function updateSectionUi() {
   const navXml = document.getElementById('nav-xml');
   const navXsd = document.getElementById('nav-xsd');
+  const navXpath = document.getElementById('nav-xpath');
   const sidebarTitle = document.getElementById('sidebar-title');
   const sidebarSub = document.getElementById('sidebar-sub');
   const sourcePanel = document.getElementById('source-panel');
+  const xpathResultPanel = document.getElementById('xpath-result-panel');
   const editor = document.getElementById('editor');
 
   navXml.classList.toggle('active', currentSection === 'xml');
   navXsd.classList.toggle('active', currentSection === 'xsd');
+  navXpath.classList.toggle('active', currentSection === 'xpath');
 
   if (currentSection === 'xsd') {
     sidebarTitle.textContent = 'XSD — Ejercicios';
     sidebarSub.textContent = 'Esquemas y validación';
     sourcePanel.hidden = false;
+    xpathResultPanel.hidden = true;
     editor.placeholder = '<!-- Escribe tu XSD aquí -->';
+  } else if (currentSection === 'xpath') {
+    sidebarTitle.textContent = 'XPath — Ejercicios';
+    sidebarSub.textContent = 'Consultas y selección de nodos';
+    sourcePanel.hidden = false;
+    xpathResultPanel.hidden = false;
+    editor.placeholder = '/biblioteca/...';
   } else {
     sidebarTitle.textContent = 'XML — Ejercicios';
     sidebarSub.textContent = 'Estructura y marcado';
     sourcePanel.hidden = true;
+    xpathResultPanel.hidden = true;
     editor.placeholder = '<!-- Escribe tu XML aquí -->';
   }
 }
@@ -111,9 +136,17 @@ function loadExercise(idx) {
   // source preview (only for xsd)
   const sourceTitle = document.getElementById('source-title');
   const sourceXml = document.getElementById('source-xml');
-  if (currentSection === 'xsd') {
+  if (currentSection === 'xsd' || currentSection === 'xpath') {
+    const label = currentSection === 'xsd' ? 'XML del ejercicio' : 'XML base para consultas';
     sourceTitle.textContent = `XML del ejercicio ${String(ex.id).padStart(2, '0')}`;
+    if (currentSection === 'xpath') {
+      sourceTitle.textContent = label;
+    }
     sourceXml.textContent = ex.sourceXml || 'Sin XML de referencia para este ejercicio.';
+  }
+
+  if (currentSection !== 'xpath') {
+    clearXPathResultPanel();
   }
 
   // requirements
@@ -191,14 +224,30 @@ async function checkExercise() {
   const ex = activeExercises[currentIdx];
   const code = document.getElementById('editor').value.trim();
   if (!code) {
-    showFeedback('err', '⚠️', 'Editor vacío', 'Escribe tu XML antes de comprobar.');
+    const msg = currentSection === 'xsd'
+      ? 'Escribe tu XSD antes de comprobar.'
+      : currentSection === 'xpath'
+        ? 'Escribe tu consulta XPath antes de comprobar.'
+        : 'Escribe tu XML antes de comprobar.';
+    showFeedback('err', '⚠️', 'Editor vacío', msg);
     return;
   }
 
   // Fast local validation first
   const localResult = currentSection === 'xsd'
     ? validateXsdLocally(code, ex.validate)
-    : validateLocally(code, ex.validate);
+    : currentSection === 'xpath'
+      ? validateXPathLocally(code, ex.sourceXml)
+      : validateLocally(code, ex.validate);
+
+  if (currentSection === 'xpath') {
+    if (localResult.ok) {
+      renderXPathResult(localResult.entries);
+    } else {
+      renderXPathResult([], localResult.message);
+    }
+  }
+
   if (!localResult.ok) {
     showFeedback('err', '✗', 'Estructura incorrecta', localResult.message);
     return;
@@ -209,6 +258,8 @@ async function checkExercise() {
   try {
     const referenceResult = currentSection === 'xsd'
       ? await validateAgainstReferenceXsd(code, ex.solutionPath)
+      : currentSection === 'xpath'
+        ? await validateAgainstReferenceXPath(code, ex.solutionPath, ex.sourceXml)
       : await validateAgainstReferenceXml(code, ex.solutionPath);
 
     if (!referenceResult.ok) {
@@ -225,6 +276,8 @@ async function checkExercise() {
       '¡Correcto!',
       currentSection === 'xsd'
         ? 'Tu XSD coincide con la estructura esperada del ejercicio y con los puntos clave de la solución.'
+        : currentSection === 'xpath'
+          ? 'Tu consulta XPath es válida y produce el resultado esperado para el ejercicio.'
         : 'Tu XML coincide con la estructura esperada del ejercicio (etiquetas, orden y atributos).'
     );
   } catch (e) {
@@ -234,6 +287,8 @@ async function checkExercise() {
       'No se pudo validar contra archivo',
       currentSection === 'xsd'
         ? 'No se pudo cargar el XSD de referencia del ejercicio. Revisa la ruta configurada y que estés ejecutando el proyecto con un servidor local.'
+        : currentSection === 'xpath'
+          ? 'No se pudo cargar la solución XPath del ejercicio. Revisa la ruta configurada y que estés ejecutando el proyecto con un servidor local.'
         : 'No se pudo cargar el XML de referencia del ejercicio. Revisa que exista el archivo en la ruta configurada y que estés ejecutando el proyecto con un servidor local.'
     );
   } finally {
@@ -333,6 +388,56 @@ async function validateAgainstReferenceXsd(userXsdCode, referencePath) {
   return { ok: true };
 }
 
+async function validateAgainstReferenceXPath(userXPath, referencePath, sourceXml) {
+  if (!referencePath) {
+    return { ok: false, message: 'Este ejercicio no tiene ruta de referencia configurada.' };
+  }
+
+  const response = await fetch(referencePath, { cache: 'no-store' });
+  if (!response.ok) {
+    return {
+      ok: false,
+      message: `No se encontró el archivo de referencia: <code>${referencePath}</code>.`
+    };
+  }
+
+  const expectedXPath = (await response.text()).trim();
+  if (!expectedXPath) {
+    return { ok: false, message: `La solución XPath está vacía en <code>${referencePath}</code>.` };
+  }
+
+  const userEval = evaluateXPathExpression(userXPath, sourceXml);
+  if (!userEval.ok) {
+    return { ok: false, message: userEval.message };
+  }
+
+  const expectedEval = evaluateXPathExpression(expectedXPath, sourceXml);
+  if (!expectedEval.ok) {
+    return { ok: false, message: `La solución XPath en <code>${referencePath}</code> no es válida.` };
+  }
+
+  const userSerialized = serializeXPathEntries(userEval.entries);
+  const expectedSerialized = serializeXPathEntries(expectedEval.entries);
+
+  if (userSerialized.length !== expectedSerialized.length) {
+    return {
+      ok: false,
+      message: `La consulta devuelve <b>${userSerialized.length}</b> resultados y se esperaban <b>${expectedSerialized.length}</b>.`
+    };
+  }
+
+  for (let i = 0; i < expectedSerialized.length; i++) {
+    if (userSerialized[i] !== expectedSerialized[i]) {
+      return {
+        ok: false,
+        message: 'El resultado de tu consulta no coincide con el resultado esperado.'
+      };
+    }
+  }
+
+  return { ok: true };
+}
+
 function compareXmlStructure(userNode, refNode, path) {
   if (!userNode || !refNode) {
     return 'No se pudo comparar la estructura XML.';
@@ -427,6 +532,133 @@ function getElementChildren(node) {
 
 function getSortedAttributeNames(node) {
   return Array.from(node.attributes || []).map((a) => a.name).sort();
+}
+
+function validateXPathLocally(xpathQuery, sourceXml) {
+  const query = xpathQuery.trim();
+  if (!query) {
+    return { ok: false, message: 'Escribe una consulta XPath antes de comprobar.' };
+  }
+
+  const evaluated = evaluateXPathExpression(query, sourceXml);
+  if (!evaluated.ok) {
+    return evaluated;
+  }
+
+  return { ok: true, entries: evaluated.entries };
+}
+
+function evaluateXPathExpression(xpathQuery, sourceXml) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(sourceXml, 'application/xml');
+  const parseErr = doc.querySelector('parsererror');
+  if (parseErr) {
+    return { ok: false, message: 'El XML base del ejercicio no es válido.' };
+  }
+
+  try {
+    const raw = doc.evaluate(xpathQuery, doc, null, XPathResult.ANY_TYPE, null);
+    const entries = extractXPathEntries(raw);
+    return { ok: true, entries };
+  } catch (e) {
+    return { ok: false, message: 'Consulta XPath no válida. Revisa la sintaxis.' };
+  }
+}
+
+function extractXPathEntries(result) {
+  const entries = [];
+
+  switch (result.resultType) {
+    case XPathResult.UNORDERED_NODE_ITERATOR_TYPE:
+    case XPathResult.ORDERED_NODE_ITERATOR_TYPE: {
+      let node = result.iterateNext();
+      while (node) {
+        entries.push(formatXPathNode(node));
+        node = result.iterateNext();
+      }
+      break;
+    }
+    case XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE:
+    case XPathResult.ORDERED_NODE_SNAPSHOT_TYPE:
+      for (let i = 0; i < result.snapshotLength; i++) {
+        entries.push(formatXPathNode(result.snapshotItem(i)));
+      }
+      break;
+    case XPathResult.STRING_TYPE:
+      entries.push(result.stringValue);
+      break;
+    case XPathResult.NUMBER_TYPE:
+      entries.push(String(result.numberValue));
+      break;
+    case XPathResult.BOOLEAN_TYPE:
+      entries.push(String(result.booleanValue));
+      break;
+    case XPathResult.ANY_UNORDERED_NODE_TYPE:
+    case XPathResult.FIRST_ORDERED_NODE_TYPE:
+      if (result.singleNodeValue) {
+        entries.push(formatXPathNode(result.singleNodeValue));
+      }
+      break;
+    default:
+      break;
+  }
+
+  return entries;
+}
+
+function formatXPathNode(node) {
+  if (!node) {
+    return '';
+  }
+
+  if (node.nodeType === Node.ATTRIBUTE_NODE) {
+    return `${node.name}="${node.value}"`;
+  }
+
+  if (node.nodeType === Node.TEXT_NODE) {
+    return node.textContent.trim();
+  }
+
+  if (node.nodeType === Node.ELEMENT_NODE) {
+    const serializer = new XMLSerializer();
+    return serializer.serializeToString(node);
+  }
+
+  return node.textContent?.trim() || '';
+}
+
+function serializeXPathEntries(entries) {
+  return entries.map((entry) => (entry || '').replace(/\s+/g, ' ').trim());
+}
+
+function renderXPathResult(entries, errorMessage) {
+  const body = document.getElementById('xpath-result-body');
+  const count = document.getElementById('xpath-result-count');
+
+  if (errorMessage) {
+    body.textContent = errorMessage;
+    count.textContent = '0';
+    return;
+  }
+
+  if (!entries.length) {
+    body.textContent = 'La consulta no devolvió resultados.';
+    count.textContent = '0';
+    return;
+  }
+
+  body.textContent = entries.join('\n\n');
+  count.textContent = String(entries.length);
+}
+
+function clearXPathResultPanel() {
+  const body = document.getElementById('xpath-result-body');
+  const count = document.getElementById('xpath-result-count');
+  if (!body || !count) {
+    return;
+  }
+  body.textContent = 'Aquí aparecerá el resultado cuando pulses Comprobar.';
+  count.textContent = '0';
 }
 
 function validateXsdLocally(code, rules) {
@@ -579,7 +811,7 @@ function closeFeedback() {
 }
 
 function switchSection(sec) {
-  if (sec !== 'xml' && sec !== 'xsd') {
+  if (sec !== 'xml' && sec !== 'xsd' && sec !== 'xpath') {
     return;
   }
 

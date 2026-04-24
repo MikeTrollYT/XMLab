@@ -22,7 +22,7 @@
   <nav>
     <button id="nav-xml" class="active" onclick="switchSection('xml')">XML</button>
     <button id="nav-xsd" onclick="switchSection('xsd')">XSD</button>
-    <button class="locked" title="Próximamente">XPath <span class="nav-badge">pronto</span></button>
+    <button id="nav-xpath" onclick="switchSection('xpath')">XPath</button>
     <button class="locked" title="Próximamente">XQuery <span class="nav-badge">pronto</span></button>
   </nav>
   <div class="progress-bar-header">
@@ -58,17 +58,27 @@
         <pre class="source-code" id="source-xml"></pre>
       </div>
 
-      <div class="editor-wrap">
-        <div class="editor-topbar">
-          <div class="dot dot-r"></div>
-          <div class="dot dot-y"></div>
-          <div class="dot dot-g"></div>
-          <span class="editor-filename" id="ed-filename">ejercicio_01.xml</span>
+      <div class="work-area">
+        <div class="editor-wrap">
+          <div class="editor-topbar">
+            <div class="dot dot-r"></div>
+            <div class="dot dot-y"></div>
+            <div class="dot dot-g"></div>
+            <span class="editor-filename" id="ed-filename">ejercicio_01.xml</span>
+          </div>
+          <div class="editor-body">
+            <div class="line-nums" id="line-nums">1</div>
+            <textarea class="code-input" id="editor" spellcheck="false" autocomplete="off" placeholder="<!-- Escribe tu XML aquí -->"></textarea>
+          </div>
         </div>
-        <div class="editor-body">
-          <div class="line-nums" id="line-nums">1</div>
-          <textarea class="code-input" id="editor" spellcheck="false" autocomplete="off" placeholder="<!-- Escribe tu XML aquí -->"></textarea>
-        </div>
+
+        <aside class="xpath-result-panel" id="xpath-result-panel" hidden>
+          <div class="xpath-result-head">
+            <span>Resultado XPath</span>
+            <span class="xpath-result-count" id="xpath-result-count">0</span>
+          </div>
+          <pre class="xpath-result-body" id="xpath-result-body">Aquí aparecerá el resultado cuando pulses Comprobar.</pre>
+        </aside>
       </div>
     </div>
 
@@ -106,5 +116,6 @@
 </body>
 <script src="xml.js"></script>
 <script src="xsd.js"></script>
+<script src="xpath.js"></script>
 <script src="script.js"></script>
 </html>
