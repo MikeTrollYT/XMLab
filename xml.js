@@ -44,14 +44,14 @@ const exercises = [
     tag: "jerarquía",
     desc: "Crea un XML para un <strong>centro educativo</strong>. Debe haber al menos <strong>3 alumnos</strong>, y cada alumno tendrá: <code>nombre</code>, <code>apellidos</code>, <code>curso</code> y una lista de <code>asignaturas</code> (al menos 2 asignaturas por alumno, cada una con <code>nombre</code> y <code>nota</code>).",
     requirements: [
-      { label: "Raíz", detail: "<centro>" },
+      { label: "Raíz", detail: "<centro_educativo>" },
       { label: "≥3 alumnos", detail: "<alumno>" },
       { label: "Asignaturas anidadas", detail: "<asignaturas><asignatura>" },
       { label: "nota en asignatura", detail: "<nota>" },
     ],
     hint: "Asignaturas va DENTRO de cada alumno: <alumno><nombre/><asignaturas><asignatura>...</asignatura></asignaturas></alumno>",
     validate: {
-      minElements: ["centro", "alumno", "asignaturas", "asignatura", "nota"],
+      minElements: ["centro_educativo", "alumno", "asignaturas", "asignatura", "nota"],
       minRepeat: { tag: "alumno", count: 3 },
       needsProlog: true,
     }

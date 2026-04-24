@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XMLab — Aprende XML, XSD, XPath & XQuery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<style>
+  @import "styles.css";
+</style>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    XMLab
+    <span>/ studio</span>
+  </div>
+  <nav>
+    <button id="nav-xml" class="active" onclick="switchSection('xml')">XML</button>
+    <button id="nav-xsd" onclick="switchSection('xsd')">XSD</button>
+    <button class="locked" title="Próximamente">XPath <span class="nav-badge">pronto</span></button>
+    <button class="locked" title="Próximamente">XQuery <span class="nav-badge">pronto</span></button>
+  </nav>
+  <div class="progress-bar-header">
+    <span id="prog-label">0 / 8</span>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+</header>
+
+<div class="app-body">
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="sidebar-head">
+      <div class="sidebar-title" id="sidebar-title">XML — Ejercicios</div>
+      <div class="sidebar-sub" id="sidebar-sub">Estructura y marcado</div>
+    </div>
+    <div class="exercise-list" id="ex-list"></div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+    <div class="ex-header">
+      <div class="ex-header-top">
+        <span class="ex-pill" id="ex-pill">XML · 01</span>
+        <h1 class="ex-title" id="ex-title">—</h1>
+      </div>
+      <p class="ex-description" id="ex-desc">—</p>
+      <div class="ex-requirements" id="ex-reqs"></div>
+    </div>
+
+    <div class="editor-area">
+      <div class="source-panel" id="source-panel" hidden>
+        <div class="source-title" id="source-title">XML de referencia</div>
+        <pre class="source-code" id="source-xml"></pre>
+      </div>
+
+      <div class="editor-wrap">
+        <div class="editor-topbar">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+          <span class="editor-filename" id="ed-filename">ejercicio_01.xml</span>
+        </div>
+        <div class="editor-body">
+          <div class="line-nums" id="line-nums">1</div>
+          <textarea class="code-input" id="editor" spellcheck="false" autocomplete="off" placeholder="<!-- Escribe tu XML aquí -->"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="hint-panel" id="hint-panel"></div>
+
+    <div class="bottom-bar">
+      <div class="nav-arrows">
+        <button class="arrow-btn" id="btn-prev" onclick="navigate(-1)" title="Ejercicio anterior">←</button>
+        <span class="ex-counter" id="ex-counter">1 / 8</span>
+        <button class="arrow-btn" id="btn-next" onclick="navigate(1)" title="Ejercicio siguiente">→</button>
+      </div>
+      <div class="spacer"></div>
+      <button class="hint-btn" onclick="toggleHint()">💡 Pista</button>
+      <button class="reset-btn" onclick="resetEditor()">↺ Limpiar</button>
+      <button class="check-btn" id="check-btn" onclick="checkExercise()">
+        <span id="check-spinner" class="spinner"></span>
+        <span id="check-label">Comprobar ✓</span>
+      </button>
+    </div>
+  </main>
+</div>
+
+<!-- FEEDBACK -->
+<div class="feedback-panel" id="feedback-panel">
+  <div class="fb-header" id="fb-header">
+    <span class="fb-icon" id="fb-icon">✓</span>
+    <span id="fb-title">Correcto</span>
+  </div>
+  <div class="fb-body" id="fb-body"></div>
+  <button class="fb-close" onclick="closeFeedback()">✕</button>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+</body>
+<script src="xml.js"></script>
+<script src="xsd.js"></script>
+<script src="script.js"></script>
+</html>
