@@ -43,7 +43,7 @@ const xpathBaseXml = `<?xml version="1.0" encoding="utf-8"?>
 const xpathExercises = [
   {
     id: 1,
-    solutionPath: 'XPath/Ejercicio1/solucion.xpath',
+    expectedResultPath: 'XPath/Ejercicio1/resultado.txt',
     title: 'Títulos con ruta absoluta',
     tag: 'rutas absolutas',
     desc: 'Obtén el título de todos los libros del catálogo usando una ruta absoluta desde la raíz del documento.',
@@ -57,7 +57,7 @@ const xpathExercises = [
   },
   {
     id: 2,
-    solutionPath: 'XPath/Ejercicio2/solucion.xpath',
+    expectedResultPath: 'XPath/Ejercicio2/resultado.txt',
     title: 'Atributos id de libros',
     tag: 'atributos',
     desc: 'Obtén los valores del atributo id de todos los libros.',
@@ -71,7 +71,7 @@ const xpathExercises = [
   },
   {
     id: 3,
-    solutionPath: 'XPath/Ejercicio3/solucion.xpath',
+    expectedResultPath: 'XPath/Ejercicio3/resultado.txt',
     title: 'Libro por id',
     tag: 'predicados',
     desc: 'Selecciona el nodo completo del libro con id igual a L003.',
@@ -85,7 +85,7 @@ const xpathExercises = [
   },
   {
     id: 4,
-    solutionPath: 'XPath/Ejercicio4/solucion.xpath',
+    expectedResultPath: 'XPath/Ejercicio4/resultado.txt',
     title: 'Libros de Distopía',
     tag: 'filtros por elemento',
     desc: 'Obtén todos los libros cuyo género sea Distopía.',
@@ -99,7 +99,7 @@ const xpathExercises = [
   },
   {
     id: 5,
-    solutionPath: 'XPath/Ejercicio5/solucion.xpath',
+    expectedResultPath: 'XPath/Ejercicio5/resultado.txt',
     title: 'Novela disponible',
     tag: 'condiciones compuestas',
     desc: 'Selecciona los libros de género Novela y que además estén disponibles.',
@@ -113,7 +113,7 @@ const xpathExercises = [
   },
   {
     id: 6,
-    solutionPath: 'XPath/Ejercicio6/solucion.xpath',
+    expectedResultPath: 'XPath/Ejercicio6/resultado.txt',
     title: 'Segundo libro',
     tag: 'posición',
     desc: 'Obtén el título del segundo libro del catálogo usando la función de posición.',
@@ -127,7 +127,7 @@ const xpathExercises = [
   },
   {
     id: 7,
-    solutionPath: 'XPath/Ejercicio7/solucion.xpath',
+    expectedResultPath: 'XPath/Ejercicio7/resultado.txt',
     title: 'Autor del último libro',
     tag: 'last()',
     desc: 'Obtén el autor del último libro que aparece en la biblioteca.',
@@ -141,7 +141,7 @@ const xpathExercises = [
   },
   {
     id: 8,
-    solutionPath: 'XPath/Ejercicio8/solucion.xpath',
+    expectedResultPath: 'XPath/Ejercicio8/resultado.txt',
     title: 'Todas las páginas',
     tag: 'búsqueda global',
     desc: 'Selecciona todos los elementos paginas que existan en cualquier nivel del documento.',

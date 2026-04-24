@@ -1,0 +1,3 @@
+<categoria>electronica</categoria>
+<categoria>hogar</categoria>
+<categoria>deporte</categoria>

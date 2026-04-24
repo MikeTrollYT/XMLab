@@ -1,0 +1,2 @@
+<item> <nombre>Auriculares BT</nombre> <precio>49.99</precio> </item>
+<item> <nombre>Teclado mecánico</nombre> <precio>89.95</precio> </item>

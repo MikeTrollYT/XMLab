@@ -1,0 +1,4 @@
+<resultado><nombre>Teclado mecánico</nombre><valoracion>4.7</valoracion></resultado>
+<resultado><nombre>Cafetera express</nombre><valoracion>4.5</valoracion></resultado>
+<resultado><nombre>Mancuernas 10kg</nombre><valoracion>4.3</valoracion></resultado>
+<resultado><nombre>Auriculares BT</nombre><valoracion>4.2</valoracion></resultado>

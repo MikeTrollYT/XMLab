@@ -1,0 +1,15 @@
+<libro id="L003" disponible="si">
+    <titulo>1984</titulo>
+    <autor>Orwell</autor>
+    <genero>Distopía</genero>
+    <anio>1949</anio>
+    <paginas>328</paginas>
+</libro>
+
+<libro id="L005" disponible="si">
+    <titulo>Fahrenheit 451</titulo>
+    <autor>Bradbury</autor>
+    <genero>Distopía</genero>
+    <anio>1953</anio>
+    <paginas>256</paginas>
+</libro>

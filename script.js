@@ -6,12 +6,14 @@ const solvedBySection = {
   xml: new Set(JSON.parse(localStorage.getItem('xml_solved') || '[]')),
   xsd: new Set(JSON.parse(localStorage.getItem('xsd_solved') || '[]')),
   xpath: new Set(JSON.parse(localStorage.getItem('xpath_solved') || '[]')),
+  xquery: new Set(JSON.parse(localStorage.getItem('xquery_solved') || '[]')),
 };
 
 const userCodeBySection = {
   xml: {},
   xsd: {},
   xpath: {},
+  xquery: {},
 };
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
@@ -29,6 +31,9 @@ function getActiveExercises() {
   }
   if (currentSection === 'xpath') {
     return xpathExercises;
+  }
+  if (currentSection === 'xquery') {
+    return xqueryExercises;
   }
   return exercises;
 }
@@ -48,6 +53,9 @@ function getEditorExtension() {
   if (currentSection === 'xpath') {
     return 'xpath';
   }
+  if (currentSection === 'xquery') {
+    return 'xquery';
+  }
   return 'xml';
 }
 
@@ -55,10 +63,12 @@ function updateSectionUi() {
   const navXml = document.getElementById('nav-xml');
   const navXsd = document.getElementById('nav-xsd');
   const navXpath = document.getElementById('nav-xpath');
+  const navXquery = document.getElementById('nav-xquery');
   const sidebarTitle = document.getElementById('sidebar-title');
   const sidebarSub = document.getElementById('sidebar-sub');
   const sourcePanel = document.getElementById('source-panel');
   const xpathResultPanel = document.getElementById('xpath-result-panel');
+  const queryResultTitle = document.getElementById('query-result-title');
   const editor = document.getElementById('editor');
 
   document.body.dataset.section = currentSection;
@@ -66,6 +76,7 @@ function updateSectionUi() {
   navXml.classList.toggle('active', currentSection === 'xml');
   navXsd.classList.toggle('active', currentSection === 'xsd');
   navXpath.classList.toggle('active', currentSection === 'xpath');
+  navXquery.classList.toggle('active', currentSection === 'xquery');
 
   if (currentSection === 'xsd') {
     sidebarTitle.textContent = 'XSD — Ejercicios';
@@ -74,12 +85,21 @@ function updateSectionUi() {
     xpathResultPanel.hidden = true;
     xpathResultPanel.style.display = 'none';
     editor.placeholder = '<!-- Escribe tu XSD aquí -->';
+  } else if (currentSection === 'xquery') {
+    sidebarTitle.textContent = 'XQuery — Ejercicios';
+    sidebarSub.textContent = 'Consultas FLWOR y funciones';
+    sourcePanel.hidden = false;
+    xpathResultPanel.hidden = false;
+    xpathResultPanel.style.display = 'flex';
+    queryResultTitle.textContent = 'Resultado XQuery';
+    editor.placeholder = 'for $p in doc("tienda.xml")//...';
   } else if (currentSection === 'xpath') {
     sidebarTitle.textContent = 'XPath — Ejercicios';
     sidebarSub.textContent = 'Consultas y selección de nodos';
     sourcePanel.hidden = false;
     xpathResultPanel.hidden = false;
     xpathResultPanel.style.display = 'flex';
+    queryResultTitle.textContent = 'Resultado XPath';
     editor.placeholder = '/biblioteca/...';
   } else {
     sidebarTitle.textContent = 'XML — Ejercicios';
@@ -138,19 +158,19 @@ function loadExercise(idx) {
   document.getElementById('ed-filename').textContent = `ejercicio_${String(ex.id).padStart(2,'0')}.${getEditorExtension()}`;
   document.getElementById('ex-counter').textContent = `${idx+1} / ${activeExercises.length}`;
 
-  // source preview (only for xsd)
+  // source preview (xsd/xpath/xquery)
   const sourceTitle = document.getElementById('source-title');
   const sourceXml = document.getElementById('source-xml');
-  if (currentSection === 'xsd' || currentSection === 'xpath') {
+  if (currentSection === 'xsd' || currentSection === 'xpath' || currentSection === 'xquery') {
     const label = currentSection === 'xsd' ? 'XML del ejercicio' : 'XML base para consultas';
     sourceTitle.textContent = `XML del ejercicio ${String(ex.id).padStart(2, '0')}`;
-    if (currentSection === 'xpath') {
+    if (currentSection === 'xpath' || currentSection === 'xquery') {
       sourceTitle.textContent = label;
     }
     sourceXml.textContent = ex.sourceXml || 'Sin XML de referencia para este ejercicio.';
   }
 
-  if (currentSection !== 'xpath') {
+  if (currentSection !== 'xpath' && currentSection !== 'xquery') {
     clearXPathResultPanel();
   }
 
@@ -233,6 +253,8 @@ async function checkExercise() {
       ? 'Escribe tu XSD antes de comprobar.'
       : currentSection === 'xpath'
         ? 'Escribe tu consulta XPath antes de comprobar.'
+        : currentSection === 'xquery'
+          ? 'Escribe tu consulta XQuery antes de comprobar.'
         : 'Escribe tu XML antes de comprobar.';
     showFeedback('err', '⚠️', 'Editor vacío', msg);
     return;
@@ -243,9 +265,11 @@ async function checkExercise() {
     ? validateXsdLocally(code, ex.validate)
     : currentSection === 'xpath'
       ? validateXPathLocally(code, ex.sourceXml)
+      : currentSection === 'xquery'
+        ? validateXQueryLocally(code, ex.sourceXml)
       : validateLocally(code, ex.validate);
 
-  if (currentSection === 'xpath') {
+  if (currentSection === 'xpath' || currentSection === 'xquery') {
     if (localResult.ok) {
       renderXPathResult(localResult.entries);
     } else {
@@ -264,7 +288,9 @@ async function checkExercise() {
     const referenceResult = currentSection === 'xsd'
       ? await validateAgainstReferenceXsd(code, ex.solutionPath)
       : currentSection === 'xpath'
-        ? await validateAgainstReferenceXPath(code, ex.solutionPath, ex.sourceXml)
+        ? await validateAgainstReferenceXPath(code, ex.expectedResultPath || ex.solutionPath, ex.sourceXml)
+        : currentSection === 'xquery'
+          ? await validateAgainstReferenceXQuery(code, ex.expectedResultPath || ex.solutionPath, ex.sourceXml)
       : await validateAgainstReferenceXml(code, ex.solutionPath);
 
     if (!referenceResult.ok) {
@@ -283,6 +309,8 @@ async function checkExercise() {
         ? 'Tu XSD coincide con la estructura esperada del ejercicio y con los puntos clave de la solución.'
         : currentSection === 'xpath'
           ? 'Tu consulta XPath es válida y produce el resultado esperado para el ejercicio.'
+          : currentSection === 'xquery'
+            ? 'Tu consulta XQuery produce el resultado esperado para el ejercicio.'
         : 'Tu XML coincide con la estructura esperada del ejercicio (etiquetas, orden y atributos).'
     );
   } catch (e) {
@@ -293,7 +321,9 @@ async function checkExercise() {
       currentSection === 'xsd'
         ? 'No se pudo cargar el XSD de referencia del ejercicio. Revisa la ruta configurada y que estés ejecutando el proyecto con un servidor local.'
         : currentSection === 'xpath'
-          ? 'No se pudo cargar la solución XPath del ejercicio. Revisa la ruta configurada y que estés ejecutando el proyecto con un servidor local.'
+          ? 'No se pudo cargar el resultado esperado de XPath. Revisa la ruta configurada y que estés ejecutando el proyecto con un servidor local.'
+          : currentSection === 'xquery'
+            ? 'No se pudo cargar el resultado esperado de XQuery. Revisa la ruta configurada y que estés ejecutando el proyecto con un servidor local.'
         : 'No se pudo cargar el XML de referencia del ejercicio. Revisa que exista el archivo en la ruta configurada y que estés ejecutando el proyecto con un servidor local.'
     );
   } finally {
@@ -406,9 +436,9 @@ async function validateAgainstReferenceXPath(userXPath, referencePath, sourceXml
     };
   }
 
-  const expectedXPath = (await response.text()).trim();
-  if (!expectedXPath) {
-    return { ok: false, message: `La solución XPath está vacía en <code>${referencePath}</code>.` };
+  const expectedRaw = (await response.text()).trim();
+  if (!expectedRaw) {
+    return { ok: false, message: `El resultado esperado está vacío en <code>${referencePath}</code>.` };
   }
 
   const userEval = evaluateXPathExpression(userXPath, sourceXml);
@@ -416,13 +446,8 @@ async function validateAgainstReferenceXPath(userXPath, referencePath, sourceXml
     return { ok: false, message: userEval.message };
   }
 
-  const expectedEval = evaluateXPathExpression(expectedXPath, sourceXml);
-  if (!expectedEval.ok) {
-    return { ok: false, message: `La solución XPath en <code>${referencePath}</code> no es válida.` };
-  }
-
   const userSerialized = serializeXPathEntries(userEval.entries);
-  const expectedSerialized = serializeXPathEntries(expectedEval.entries);
+  const expectedSerialized = serializeXPathEntries(parseExpectedResultEntries(expectedRaw));
 
   if (userSerialized.length !== expectedSerialized.length) {
     return {
@@ -441,6 +466,87 @@ async function validateAgainstReferenceXPath(userXPath, referencePath, sourceXml
   }
 
   return { ok: true };
+}
+
+async function validateAgainstReferenceXQuery(userXQuery, referencePath, sourceXml) {
+  if (!referencePath) {
+    return { ok: false, message: 'Este ejercicio no tiene ruta de referencia configurada.' };
+  }
+
+  const response = await fetch(referencePath, { cache: 'no-store' });
+  if (!response.ok) {
+    return {
+      ok: false,
+      message: `No se encontró el archivo de referencia: <code>${referencePath}</code>.`
+    };
+  }
+
+  const expectedRaw = (await response.text()).trim();
+  if (!expectedRaw) {
+    return { ok: false, message: `El resultado esperado está vacío en <code>${referencePath}</code>.` };
+  }
+
+  const userEval = evaluateXQueryExpression(userXQuery, sourceXml);
+  if (!userEval.ok) {
+    return { ok: false, message: userEval.message };
+  }
+
+  const userSerialized = serializeXPathEntries(userEval.entries);
+  const expectedSerialized = serializeXPathEntries(parseExpectedResultEntries(expectedRaw));
+
+  if (userSerialized.length !== expectedSerialized.length) {
+    return {
+      ok: false,
+      message: `La consulta devuelve <b>${userSerialized.length}</b> resultados y se esperaban <b>${expectedSerialized.length}</b>.`
+    };
+  }
+
+  for (let i = 0; i < expectedSerialized.length; i++) {
+    if (userSerialized[i] !== expectedSerialized[i]) {
+      return {
+        ok: false,
+        message: 'El resultado de tu consulta no coincide con el resultado esperado.'
+      };
+    }
+  }
+
+  return { ok: true };
+}
+
+function parseExpectedResultEntries(rawText) {
+  const trimmed = rawText.trim();
+  if (!trimmed) {
+    return [];
+  }
+
+  // Best effort: parse as XML fragments wrapped in a synthetic root.
+  const parser = new DOMParser();
+  const wrapped = `<root>${trimmed}</root>`;
+  const doc = parser.parseFromString(wrapped, 'application/xml');
+  const parseErr = doc.querySelector('parsererror');
+  if (!parseErr) {
+    const out = [];
+    for (const node of Array.from(doc.documentElement.childNodes)) {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        out.push(new XMLSerializer().serializeToString(node));
+      } else if (node.nodeType === Node.TEXT_NODE) {
+        const parts = node.textContent
+          .split(/\r?\n/)
+          .map((p) => p.trim())
+          .filter(Boolean);
+        out.push(...parts);
+      }
+    }
+    if (out.length) {
+      return out;
+    }
+  }
+
+  // Fallback: one result per line.
+  return trimmed
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
 }
 
 function compareXmlStructure(userNode, refNode, path) {
@@ -553,6 +659,20 @@ function validateXPathLocally(xpathQuery, sourceXml) {
   return { ok: true, entries: evaluated.entries };
 }
 
+function validateXQueryLocally(xqueryCode, sourceXml) {
+  const query = xqueryCode.trim();
+  if (!query) {
+    return { ok: false, message: 'Escribe una consulta XQuery antes de comprobar.' };
+  }
+
+  const evaluated = evaluateXQueryExpression(query, sourceXml);
+  if (!evaluated.ok) {
+    return evaluated;
+  }
+
+  return { ok: true, entries: evaluated.entries };
+}
+
 function evaluateXPathExpression(xpathQuery, sourceXml) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(sourceXml, 'application/xml');
@@ -634,6 +754,352 @@ function formatXPathNode(node) {
 
 function serializeXPathEntries(entries) {
   return entries.map((entry) => (entry || '').replace(/\s+/g, ' ').trim());
+}
+
+function evaluateXQueryExpression(xqueryCode, sourceXml) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(sourceXml, 'application/xml');
+  const parseErr = doc.querySelector('parsererror');
+  if (parseErr) {
+    return { ok: false, message: 'El XML base del ejercicio no es válido.' };
+  }
+
+  try {
+    const normalized = xqueryCode.replace(/\r/g, '').trim();
+    const entries = runMiniXQuery(normalized, doc);
+    return { ok: true, entries: entries.map((v) => String(v).trim()).filter(Boolean) };
+  } catch (e) {
+    return {
+      ok: false,
+      message: 'Consulta XQuery no válida para el evaluador del curso. Revisa sintaxis FLWOR, count(), avg(), if/then/else y distinct-values().'
+    };
+  }
+}
+
+function runMiniXQuery(query, xmlDoc) {
+  const returnIdx = indexOfWord(query, 'return');
+  if (returnIdx < 0) {
+    throw new Error('missing return');
+  }
+
+  const prefix = query.slice(0, returnIdx).trim();
+  const returnExpr = query.slice(returnIdx + 6).trim();
+
+  if (!prefix) {
+    return evaluateXQueryExprAsStrings(returnExpr, {}, xmlDoc);
+  }
+
+  if (prefix.toLowerCase().startsWith('let ')) {
+    const env = evaluateLetClauses(prefix, {}, xmlDoc);
+    return evaluateXQueryExprAsStrings(returnExpr, env, xmlDoc);
+  }
+
+  if (!prefix.toLowerCase().startsWith('for ')) {
+    throw new Error('unsupported query');
+  }
+
+  const forParsed = parseForClause(prefix);
+  let rows = evaluateXQuerySequence(forParsed.inExpr, {}, xmlDoc).map((item) => ({ [forParsed.varName]: item }));
+
+  if (forParsed.letPart) {
+    rows = rows.map((row) => ({ ...row, ...evaluateLetClauses(forParsed.letPart, row, xmlDoc) }));
+  }
+
+  if (forParsed.whereExpr) {
+    rows = rows.filter((row) => evaluateXQueryCondition(forParsed.whereExpr, row, xmlDoc));
+  }
+
+  if (forParsed.orderExpr) {
+    const dir = forParsed.orderDescending ? -1 : 1;
+    rows.sort((a, b) => {
+      const va = evaluateXQueryScalar(forParsed.orderExpr, a, xmlDoc);
+      const vb = evaluateXQueryScalar(forParsed.orderExpr, b, xmlDoc);
+      const na = Number(va);
+      const nb = Number(vb);
+      if (!Number.isNaN(na) && !Number.isNaN(nb)) {
+        return (na - nb) * dir;
+      }
+      return String(va).localeCompare(String(vb)) * dir;
+    });
+  }
+
+  const result = [];
+  for (const row of rows) {
+    result.push(...evaluateXQueryExprAsStrings(returnExpr, row, xmlDoc));
+  }
+  return result;
+}
+
+function parseForClause(prefix) {
+  const forMatch = prefix.match(/^for\s+\$(\w+)\s+in\s+([\s\S]+?)(?=\s+(?:let|where|order\s+by)\b|$)([\s\S]*)$/i);
+  if (!forMatch) {
+    throw new Error('invalid for clause');
+  }
+
+  let rest = (forMatch[3] || '').trim();
+  let letPart = '';
+  let whereExpr = '';
+  let orderExpr = '';
+  let orderDescending = false;
+
+  const letMatch = rest.match(/^let\s+([\s\S]+?)(?=\s+where\b|\s+order\s+by\b|$)([\s\S]*)$/i);
+  if (letMatch) {
+    letPart = `let ${letMatch[1].trim()}`;
+    rest = (letMatch[2] || '').trim();
+  }
+
+  const whereMatch = rest.match(/^where\s+([\s\S]+?)(?=\s+order\s+by\b|$)([\s\S]*)$/i);
+  if (whereMatch) {
+    whereExpr = whereMatch[1].trim();
+    rest = (whereMatch[2] || '').trim();
+  }
+
+  const orderMatch = rest.match(/^order\s+by\s+([\s\S]+?)(?:\s+(ascending|descending))?\s*$/i);
+  if (orderMatch) {
+    orderExpr = orderMatch[1].trim();
+    orderDescending = (orderMatch[2] || '').toLowerCase() === 'descending';
+  }
+
+  return {
+    varName: forMatch[1],
+    inExpr: forMatch[2].trim(),
+    letPart,
+    whereExpr,
+    orderExpr,
+    orderDescending,
+  };
+}
+
+function evaluateLetClauses(letCode, baseEnv, xmlDoc) {
+  const env = { ...baseEnv };
+  const code = letCode.replace(/^let\s+/i, '').trim();
+  const parts = code.split(/\s+let\s+/i);
+  for (const part of parts) {
+    const m = part.match(/^\$(\w+)\s*:=\s*([\s\S]+)$/);
+    if (!m) {
+      throw new Error('invalid let clause');
+    }
+    const value = evaluateXQueryExpressionRaw(m[2].trim(), env, xmlDoc);
+    env[m[1]] = value;
+  }
+  return env;
+}
+
+function evaluateXQueryCondition(condition, env, xmlDoc) {
+  const andParts = condition.split(/\s+and\s+/i);
+  for (const part of andParts) {
+    const atom = part.trim();
+    const m = atom.match(/^([\s\S]+?)\s*(=|!=|<=|>=|<|>)\s*([\s\S]+)$/);
+    if (!m) {
+      if (!evaluateXQueryScalar(atom, env, xmlDoc)) {
+        return false;
+      }
+      continue;
+    }
+
+    const left = evaluateXQueryScalar(m[1].trim(), env, xmlDoc);
+    const right = evaluateXQueryScalar(m[3].trim(), env, xmlDoc);
+
+    const nl = Number(left);
+    const nr = Number(right);
+    const numeric = !Number.isNaN(nl) && !Number.isNaN(nr);
+    const a = numeric ? nl : String(left);
+    const b = numeric ? nr : String(right);
+
+    if (m[2] === '=' && a !== b) return false;
+    if (m[2] === '!=' && a === b) return false;
+    if (m[2] === '<' && !(a < b)) return false;
+    if (m[2] === '>' && !(a > b)) return false;
+    if (m[2] === '<=' && !(a <= b)) return false;
+    if (m[2] === '>=' && !(a >= b)) return false;
+  }
+  return true;
+}
+
+function evaluateXQueryExprAsStrings(expr, env, xmlDoc) {
+  const value = evaluateXQueryExpressionRaw(expr, env, xmlDoc);
+  const arr = Array.isArray(value) ? value : [value];
+  return arr.map((item) => xqueryItemToString(item)).filter(Boolean);
+}
+
+function evaluateXQueryExpressionRaw(expr, env, xmlDoc) {
+  const s = expr.trim();
+
+  const ifMatch = s.match(/^if\s*\(([\s\S]+)\)\s*then\s*([\s\S]+)\s*else\s*([\s\S]+)$/i);
+  if (ifMatch) {
+    return evaluateXQueryCondition(ifMatch[1].trim(), env, xmlDoc)
+      ? evaluateXQueryExpressionRaw(ifMatch[2].trim(), env, xmlDoc)
+      : evaluateXQueryExpressionRaw(ifMatch[3].trim(), env, xmlDoc);
+  }
+
+  const countMatch = s.match(/^count\(([^]+)\)$/i);
+  if (countMatch) {
+    return [String(evaluateXQuerySequence(countMatch[1].trim(), env, xmlDoc).length)];
+  }
+
+  const avgMatch = s.match(/^avg\(([^]+)\)$/i);
+  if (avgMatch) {
+    const nums = evaluateXQuerySequence(avgMatch[1].trim(), env, xmlDoc).map((v) => Number(xqueryItemToString(v)));
+    if (!nums.length) {
+      return ['0'];
+    }
+    const avg = nums.reduce((a, b) => a + b, 0) / nums.length;
+    return [Number(avg.toFixed(2)).toString()];
+  }
+
+  if (/^<\w+>[\s\S]*<\/\w+>$/.test(s)) {
+    return [renderXQueryElementConstructor(s, env, xmlDoc)];
+  }
+
+  return evaluateXQuerySequence(s, env, xmlDoc);
+}
+
+function evaluateXQuerySequence(expr, env, xmlDoc) {
+  const s = expr.trim();
+
+  const distinctMatch = s.match(/^distinct-values\(([^]+)\)$/i);
+  if (distinctMatch) {
+    const base = evaluateXQuerySequence(distinctMatch[1].trim(), env, xmlDoc).map((item) => xqueryItemToString(item));
+    return [...new Set(base)];
+  }
+
+  if (s.startsWith('"') && s.endsWith('"')) {
+    return [s.slice(1, -1)];
+  }
+
+  if (/^-?\d+(\.\d+)?$/.test(s)) {
+    return [s];
+  }
+
+  if (/^\$\w+$/.test(s)) {
+    const key = s.slice(1);
+    const value = env[key];
+    if (value == null) {
+      return [];
+    }
+    return Array.isArray(value) ? value : [value];
+  }
+
+  const varPath = s.match(/^\$(\w+)(\/.+)$/);
+  if (varPath) {
+    const base = env[varPath[1]];
+    if (!base) {
+      return [];
+    }
+    const nodes = Array.isArray(base) ? base : [base];
+    const out = [];
+    const pathExpr = `.${varPath[2]}`;
+    for (const node of nodes) {
+      if (node?.nodeType) {
+        out.push(...evaluateXPathNodeSequence(pathExpr, xmlDoc, node));
+      }
+    }
+    return out;
+  }
+
+  const docPath = s.match(/^doc\([^)]*\)([\s\S]*)$/i);
+  if (docPath) {
+    const suffix = (docPath[1] || '').trim();
+    const xpath = suffix || '/';
+    return evaluateXPathNodeSequence(xpath, xmlDoc, xmlDoc);
+  }
+
+  if (s.startsWith('/')) {
+    return evaluateXPathNodeSequence(s, xmlDoc, xmlDoc);
+  }
+
+  if (s.startsWith('./') || s.startsWith('//')) {
+    return evaluateXPathNodeSequence(s, xmlDoc, xmlDoc);
+  }
+
+  return [s];
+}
+
+function evaluateXPathNodeSequence(xpath, xmlDoc, contextNode) {
+  const result = xmlDoc.evaluate(xpath, contextNode, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+  const out = [];
+  let node = result.iterateNext();
+  while (node) {
+    out.push(node);
+    node = result.iterateNext();
+  }
+  return out;
+}
+
+function xqueryItemToString(item) {
+  if (item == null) {
+    return '';
+  }
+  if (typeof item === 'string' || typeof item === 'number' || typeof item === 'boolean') {
+    return String(item);
+  }
+  if (item.nodeType === Node.ATTRIBUTE_NODE) {
+    return `${item.name}="${item.value}"`;
+  }
+  if (item.nodeType === Node.TEXT_NODE) {
+    return item.textContent?.trim() || '';
+  }
+  if (item.nodeType === Node.ELEMENT_NODE) {
+    return new XMLSerializer().serializeToString(item);
+  }
+  return String(item);
+}
+
+function renderXQueryElementConstructor(expr, env, xmlDoc) {
+  const m = expr.match(/^<(\w+)>([\s\S]*)<\/\1>$/);
+  if (!m) {
+    throw new Error('invalid element constructor');
+  }
+
+  const tag = m[1];
+  const inner = m[2];
+  const pieces = [];
+  let i = 0;
+
+  while (i < inner.length) {
+    const open = inner.indexOf('{', i);
+    if (open < 0) {
+      const literal = inner.slice(i).trim();
+      if (literal) {
+        pieces.push(literal);
+      }
+      break;
+    }
+
+    const literal = inner.slice(i, open).trim();
+    if (literal) {
+      pieces.push(literal);
+    }
+
+    let depth = 1;
+    let j = open + 1;
+    while (j < inner.length && depth > 0) {
+      if (inner[j] === '{') depth += 1;
+      if (inner[j] === '}') depth -= 1;
+      j += 1;
+    }
+
+    const block = inner.slice(open + 1, j - 1).trim();
+    const evalPieces = evaluateXQueryExprAsStrings(block, env, xmlDoc);
+    pieces.push(...evalPieces);
+    i = j;
+  }
+
+  return `<${tag}>${pieces.join('')}</${tag}>`;
+}
+
+function evaluateXQueryScalar(expr, env, xmlDoc) {
+  const seq = evaluateXQuerySequence(expr, env, xmlDoc);
+  if (!seq.length) {
+    return '';
+  }
+  return xqueryItemToString(seq[0]);
+}
+
+function indexOfWord(source, word) {
+  const re = new RegExp(`\\b${word}\\b`, 'i');
+  const m = re.exec(source);
+  return m ? m.index : -1;
 }
 
 function renderXPathResult(entries, errorMessage) {
@@ -816,7 +1282,7 @@ function closeFeedback() {
 }
 
 function switchSection(sec) {
-  if (sec !== 'xml' && sec !== 'xsd' && sec !== 'xpath') {
+  if (sec !== 'xml' && sec !== 'xsd' && sec !== 'xpath' && sec !== 'xquery') {
     return;
   }
 

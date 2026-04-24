@@ -1,0 +1,7 @@
+<libro id="L003" disponible="si">
+  <titulo>1984</titulo>
+  <autor>Orwell</autor>
+  <genero>Distopía</genero>
+  <anio>1949</anio>
+  <paginas>328</paginas>
+</libro>

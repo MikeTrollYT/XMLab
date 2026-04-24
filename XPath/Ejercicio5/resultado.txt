@@ -1,0 +1,7 @@
+<libro id="L001" disponible="si">
+    <titulo>Don Quijote</titulo>
+    <autor>Cervantes</autor>
+    <genero>Novela</genero>
+    <anio>1605</anio>
+    <paginas>863</paginas>
+</libro>

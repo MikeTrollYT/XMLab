@@ -1,0 +1,6 @@
+<producto><nombre>Auriculares BT</nombre><estado>Disponible</estado></producto>
+<producto><nombre>Teclado mecánico</nombre><estado>Bajo stock</estado></producto>
+<producto><nombre>Lámpara LED</nombre><estado>Disponible</estado></producto>
+<producto><nombre>Cafetera express</nombre><estado>Bajo stock</estado></producto>
+<producto><nombre>Esterilla yoga</nombre><estado>Disponible</estado></producto>
+<producto><nombre>Mancuernas 10kg</nombre><estado>Disponible</estado></producto>

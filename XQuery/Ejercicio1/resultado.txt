@@ -1,0 +1,6 @@
+<nombre>Auriculares BT</nombre>
+<nombre>Teclado mecánico</nombre>
+<nombre>Lámpara LED</nombre>
+<nombre>Cafetera express</nombre>
+<nombre>Esterilla yoga</nombre>
+<nombre>Mancuernas 10kg</nombre>
