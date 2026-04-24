@@ -908,3 +908,28 @@ body[data-section="xquery"] .xpath-result-panel {
     opacity: 0;
     transition: opacity .15s;
 }
+
+.made-by {
+    position: fixed;
+    left: 16px;
+    bottom: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    background: rgba(19, 22, 30, .8);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 8px;
+    z-index: 120;
+    backdrop-filter: blur(4px);
+}
+
+.made-by a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.made-by a:hover {
+    text-decoration: underline;
+}

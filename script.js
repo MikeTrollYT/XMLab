@@ -21,8 +21,10 @@ function init() {
   updateSectionUi();
   renderSidebar();
   loadExercise(0);
-  document.getElementById('editor').addEventListener('input', onEditorInput);
-  document.getElementById('editor').addEventListener('keydown', handleTab);
+  const editor = document.getElementById('editor');
+  editor.addEventListener('input', onEditorInput);
+  editor.addEventListener('keydown', handleTab);
+  editor.addEventListener('scroll', syncLineNumsScroll);
 }
 
 function getActiveExercises() {
@@ -206,6 +208,13 @@ function updateLineNums() {
   const lines = (document.getElementById('editor').value.match(/\n/g) || []).length + 1;
   document.getElementById('line-nums').innerHTML =
     Array.from({length: lines}, (_, i) => i+1).join('<br>');
+  syncLineNumsScroll();
+}
+
+function syncLineNumsScroll() {
+  const editor = document.getElementById('editor');
+  const lineNums = document.getElementById('line-nums');
+  lineNums.scrollTop = editor.scrollTop;
 }
 
 function handleTab(e) {
