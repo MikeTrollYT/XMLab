@@ -146,7 +146,7 @@ const exercises = [
     tag: "complejo",
     desc: "Crea un XML de <strong>expedientes médicos</strong> con al menos <strong>3 pacientes</strong>. Cada paciente tiene atributo <code>id</code> y los campos: <code>nombre</code>, <code>edad</code>, <code>grupo_sanguineo</code>. Además, cada paciente tiene una lista de <code>visitas</code> con al menos 2 <code>visita</code>, cada una con: <code>fecha</code>, <code>motivo</code> y <code>medico</code>.",
     requirements: [
-      { label: "Raíz", detail: "<expedientes>" },
+      { label: "Raíz", detail: "<expedientes_medicos>" },
       { label: "≥3 pacientes", detail: "<paciente id=\"...\">" },
       { label: "Datos básicos", detail: "nombre, edad, grupo_sanguineo" },
       { label: "Historial de visitas", detail: "<visitas><visita>" },
@@ -154,7 +154,7 @@ const exercises = [
     ],
     hint: "¡Ejercicio complejo! Empieza por la estructura raíz y ve añadiendo niveles de anidamiento poco a poco.",
     validate: {
-      minElements: ["expedientes", "paciente", "nombre", "edad", "visitas", "visita", "fecha"],
+      minElements: ["expedientes_medicos", "paciente", "nombre", "edad", "visitas", "visita", "fecha"],
       minRepeat: { tag: "paciente", count: 3 },
       attributes: [{ tag: "paciente", attrs: ["id"] }],
       needsProlog: true,
