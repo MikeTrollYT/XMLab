@@ -61,6 +61,8 @@ function updateSectionUi() {
   const xpathResultPanel = document.getElementById('xpath-result-panel');
   const editor = document.getElementById('editor');
 
+  document.body.dataset.section = currentSection;
+
   navXml.classList.toggle('active', currentSection === 'xml');
   navXsd.classList.toggle('active', currentSection === 'xsd');
   navXpath.classList.toggle('active', currentSection === 'xpath');
@@ -70,18 +72,21 @@ function updateSectionUi() {
     sidebarSub.textContent = 'Esquemas y validación';
     sourcePanel.hidden = false;
     xpathResultPanel.hidden = true;
+    xpathResultPanel.style.display = 'none';
     editor.placeholder = '<!-- Escribe tu XSD aquí -->';
   } else if (currentSection === 'xpath') {
     sidebarTitle.textContent = 'XPath — Ejercicios';
     sidebarSub.textContent = 'Consultas y selección de nodos';
     sourcePanel.hidden = false;
     xpathResultPanel.hidden = false;
+    xpathResultPanel.style.display = 'flex';
     editor.placeholder = '/biblioteca/...';
   } else {
     sidebarTitle.textContent = 'XML — Ejercicios';
     sidebarSub.textContent = 'Estructura y marcado';
     sourcePanel.hidden = true;
     xpathResultPanel.hidden = true;
+    xpathResultPanel.style.display = 'none';
     editor.placeholder = '<!-- Escribe tu XML aquí -->';
   }
 }

@@ -389,6 +389,33 @@ main {
     gap: 14px;
 }
 
+body[data-section="xpath"] .editor-area {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    grid-template-rows: auto minmax(0, 1fr);
+    align-items: stretch;
+}
+
+body[data-section="xpath"] .source-panel {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+body[data-section="xpath"] .work-area {
+    display: contents;
+}
+
+body[data-section="xpath"] .editor-wrap {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+body[data-section="xpath"] .xpath-result-panel {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    width: auto;
+}
+
 .source-panel {
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -457,6 +484,14 @@ main {
     flex-shrink: 0;
 }
 
+body:not([data-section="xpath"]) .xpath-result-panel {
+    display: none !important;
+}
+
+body[data-section="xpath"] .xpath-result-panel {
+    display: flex;
+}
+
 .xpath-result-head {
     display: flex;
     justify-content: space-between;
@@ -504,6 +539,14 @@ main {
 }
 
 @media (max-width: 1100px) {
+    body[data-section="xpath"] .editor-area {
+        display: flex;
+    }
+
+    body[data-section="xpath"] .work-area {
+        display: flex;
+    }
+
     .work-area {
         flex-direction: column;
     }
