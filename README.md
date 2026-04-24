@@ -29,20 +29,6 @@ El laboratorio está dividido en 4 pilares fundamentales, con 8 ejercicios incre
 
 ---
 
-## 🛠️ Instalación y Uso (¡IMPORTANTE!)
-
-Debido a que la aplicación necesita cargar los archivos de solución (`solucion.xml`, `resultado.txt`) para comprobar si tus respuestas son correctas, **no puedes simplemente abrir el archivo `index.html` con doble clic**. Las políticas de seguridad del navegador (CORS) bloquearán las peticiones locales.
-
-**Para ejecutar XMLab correctamente:**
-
-1. Clona o descarga este repositorio en tu equipo.
-2. Abre la carpeta del proyecto en **Visual Studio Code**.
-3. Instala la extensión **Live Server** (si no la tienes ya).
-4. Haz clic derecho sobre `index.html` y selecciona **"Open with Live Server"**.
-5. ¡Empieza a programar!
-
----
-
 ## 🗂️ Estructura del Proyecto
 
 El código está escrito de forma modular utilizando **HTML5, CSS3 y Vanilla JavaScript** (sin frameworks pesados), lo que lo hace perfecto para estudiar su funcionamiento en 1º DAW.
