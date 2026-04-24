@@ -665,6 +665,7 @@ body[data-section="xquery"] .xpath-result-panel {
 .nav-arrows {
     display: flex;
     gap: 6px;
+    align-items: center;
 }
 
 .arrow-btn {
@@ -698,6 +699,10 @@ body[data-section="xquery"] .xpath-result-panel {
     font-size: 12px;
     color: var(--text-muted);
     padding: 0 4px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    height: 36px;
 }
 
 .spacer {
