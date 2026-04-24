@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<banco>
+    <sucursal id="1" ciudad="Almeria">
+        <direccion>Calle Navarro Rodrigo 12</direccion>
+        <telefono>950100200</telefono>
+        <empleados>
+            <empleado id="E01">
+                <nombre>Ana Garcia</nombre>
+                <cargo>Directora</cargo>
+                <salario>3500</salario>
+                <turno_noche />
+            </empleado>
+            <empleado id="E02">
+                <nombre>Pedro Ruiz</nombre>
+                <cargo>Cajero</cargo>
+                <salario>1800</salario>
+                <turno_noche />
+            </empleado>
+        </empleados>
+    </sucursal>
+    <sucursal id="2" ciudad="Roquetas de Mar">
+        <direccion>Avenida del Mediterraneo 5</direccion>
+        <telefono>950300400</telefono>
+        <empleados>
+            <empleado id="E03">
+                <nombre>Marta Lopez</nombre>
+                <cargo>Directora</cargo>
+                <salario>3200</salario>
+                <turno_noche />
+            </empleado>
+            <empleado id="E04">
+                <nombre>Juan Martinez</nombre>
+                <cargo>Asesor</cargo>
+                <salario>2100</salario>
+                <turno_noche />
+            </empleado>
+        </empleados>
+    </sucursal>
+    <sucursal id="3" ciudad="El Ejido">
+        <direccion>Plaza de Espana 3</direccion>
+        <telefono>950500600</telefono>
+        <empleados>
+            <empleado id="E05">
+                <nombre>Lucia Fernandez</nombre>
+                <cargo>Directora</cargo>
+                <salario>3100</salario>
+                <turno_noche />
+            </empleado>
+            <empleado id="E06">
+                <nombre>Antonio Moreno</nombre>
+                <cargo>Cajero</cargo>
+                <salario>1750</salario>
+                <turno_noche />
+            </empleado>
+        </empleados>
+    </sucursal>
+</banco>

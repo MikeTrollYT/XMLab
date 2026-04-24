@@ -2,7 +2,7 @@
     <titulo>1984</titulo>
     <autor>Orwell</autor>
     <genero>Distopía</genero>
-    <anio>1949</anio>
+    <año>1949</año>
     <paginas>328</paginas>
 </libro>
 
@@ -10,6 +10,6 @@
     <titulo>Fahrenheit 451</titulo>
     <autor>Bradbury</autor>
     <genero>Distopía</genero>
-    <anio>1953</anio>
+    <año>1953</año>
     <paginas>256</paginas>
 </libro>

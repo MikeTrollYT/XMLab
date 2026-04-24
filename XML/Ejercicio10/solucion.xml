@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<agenda>
+    <contacto>
+        <nombre>Laura</nombre>
+        <telefono>950111222</telefono>
+        <email>laura@correo.es</email>
+        <movil />
+        <fax />
+    </contacto>
+    <contacto>
+        <nombre>Carlos</nombre>
+        <telefono>950333444</telefono>
+        <email>carlos@correo.es</email>
+        <movil />
+        <fax />
+    </contacto>
+    <contacto>
+        <nombre>Sofia</nombre>
+        <telefono>950555666</telefono>
+        <email>sofia@correo.es</email>
+        <movil />
+        <fax />
+    </contacto>
+    <contacto>
+        <nombre>Miguel</nombre>
+        <telefono>950777888</telefono>
+        <email>miguel@correo.es</email>
+        <movil />
+        <fax />
+    </contacto>
+</agenda>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<videoteca>
+    <pelicula id="1">
+        <titulo>El laberinto del fauno</titulo>
+        <director>Guillermo del Toro</director>
+        <año>2006</año>
+        <duracion>118</duracion>
+        <genero>Fantasia</genero>
+    </pelicula>
+    <pelicula id="2">
+        <titulo>Volver</titulo>
+        <director>Pedro Almodovar</director>
+        <año>2006</año>
+        <duracion>121</duracion>
+        <genero>Drama</genero>
+    </pelicula>
+    <pelicula id="3">
+        <titulo>Los lunes al sol</titulo>
+        <director>Fernando Leon de Aranoa</director>
+        <año>2002</año>
+        <duracion>113</duracion>
+        <genero>Drama</genero>
+    </pelicula>
+    <pelicula id="4">
+        <titulo>Celda 211</titulo>
+        <director>Daniel Monzon</director>
+        <año>2009</año>
+        <duracion>111</duracion>
+        <genero>Thriller</genero>
+    </pelicula>
+</videoteca>

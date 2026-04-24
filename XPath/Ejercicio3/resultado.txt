@@ -2,6 +2,6 @@
   <titulo>1984</titulo>
   <autor>Orwell</autor>
   <genero>Distopía</genero>
-  <anio>1949</anio>
+  <año>1949</año>
   <paginas>328</paginas>
 </libro>

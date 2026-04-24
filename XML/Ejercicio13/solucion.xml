@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<torneos>
+    <torneo id="1" deporte="futbol">
+        <nombre>Liga Almeriense</nombre>
+        <sede>Almeria</sede>
+        <equipos>
+            <equipo>
+                <nombre_equipo>UD Almeria B</nombre_equipo>
+                <ciudad>Almeria</ciudad>
+                <clasificado />
+            </equipo>
+            <equipo>
+                <nombre_equipo>CD El Ejido</nombre_equipo>
+                <ciudad>El Ejido</ciudad>
+                <clasificado />
+            </equipo>
+            <equipo>
+                <nombre_equipo>CF Huercal Overa</nombre_equipo>
+                <ciudad>Huercal-Overa</ciudad>
+                <clasificado />
+            </equipo>
+        </equipos>
+    </torneo>
+    <torneo id="2" deporte="baloncesto">
+        <nombre>Copa Provincia</nombre>
+        <sede>Roquetas de Mar</sede>
+        <equipos>
+            <equipo>
+                <nombre_equipo>CB Roquetas</nombre_equipo>
+                <ciudad>Roquetas de Mar</ciudad>
+                <clasificado />
+            </equipo>
+            <equipo>
+                <nombre_equipo>CB Almeria</nombre_equipo>
+                <ciudad>Almeria</ciudad>
+                <clasificado />
+            </equipo>
+            <equipo>
+                <nombre_equipo>CB Adra</nombre_equipo>
+                <ciudad>Adra</ciudad>
+                <clasificado />
+            </equipo>
+        </equipos>
+    </torneo>
+</torneos>

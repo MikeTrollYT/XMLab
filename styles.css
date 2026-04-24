@@ -347,7 +347,8 @@ main {
     font-size: 14px;
     color: var(--text-dim);
     line-height: 1.6;
-    max-width: 800px;
+    width: 100%;
+    max-width: none;
 }
 
 .ex-requirements {

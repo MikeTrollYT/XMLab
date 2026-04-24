@@ -24,15 +24,15 @@ const exercises = [
     solutionPath: 'XML/Ejercicio2/solucion.xml',
     title: "Biblioteca de libros",
     tag: "anidamiento",
-    desc: "Crea un XML para una <strong>biblioteca</strong>. Debe contener al menos <strong>3 libros</strong>. Cada libro tendrá: <code>titulo</code>, <code>autor</code>, <code>anio</code>, <code>isbn</code> y <code>genero</code>.",
+    desc: "Crea un XML para una <strong>biblioteca</strong>. Debe contener al menos <strong>3 libros</strong>. Cada libro tendrá: <code>titulo</code>, <code>autor</code>, <code>año</code>, <code>isbn</code> y <code>genero</code>.",
     requirements: [
       { label: "Raíz", detail: "<biblioteca>" },
       { label: "≥3 libros", detail: "<libro>" },
-      { label: "5 campos por libro", detail: "titulo, autor, anio, isbn, genero" },
+      { label: "5 campos por libro", detail: "titulo, autor, año, isbn, genero" },
     ],
-    hint: "Estructura: <biblioteca> → <libro> → <titulo>, <autor>, <anio>, <isbn>, <genero>",
+    hint: "Estructura: <biblioteca> → <libro> → <titulo>, <autor>, <año>, <isbn>, <genero>",
     validate: {
-      minElements: ["biblioteca", "libro", "titulo", "autor", "anio", "isbn", "genero"],
+      minElements: ["biblioteca", "libro", "titulo", "autor", "año", "isbn", "genero"],
       minRepeat: { tag: "libro", count: 3 },
       needsProlog: true,
     }
@@ -158,6 +158,134 @@ const exercises = [
       minRepeat: { tag: "paciente", count: 3 },
       attributes: [{ tag: "paciente", attrs: ["id"] }],
       needsProlog: true,
+    }
+  },
+  {
+    id: 9,
+    solutionPath: 'XML/Ejercicio9/solucion.xml',
+    title: "Colección de películas",
+    tag: "anidamiento + atributos",
+    desc: "Crea un XML para una <strong>videoteca</strong> con al menos <strong>4 películas</strong>. El elemento <code>&lt;pelicula&gt;</code> debe tener el atributo <code>id</code>. Cada película tendrá: <code>titulo</code>, <code>director</code>, <code>año</code>, <code>duracion</code> (en minutos) y <code>genero</code>.",
+    requirements: [
+      { label: "Prólogo", detail: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" },
+      { label: "Raíz", detail: "<videoteca>" },
+      { label: "≥4 películas", detail: "<pelicula id=\"...\">" },
+      { label: "5 campos por película", detail: "titulo, director, año, duracion, genero" },
+    ],
+    hint: "Recuerda: los atributos van dentro de la etiqueta de apertura y el valor siempre entre comillas: <pelicula id=\"1\">",
+    validate: {
+      minElements: ["videoteca", "pelicula", "titulo", "director", "año", "duracion", "genero"],
+      minRepeat: { tag: "pelicula", count: 4 },
+      needsProlog: true,
+      attributes: [{ tag: "pelicula", attrs: ["id"] }],
+    }
+  },
+  {
+    id: 10,
+    solutionPath: 'XML/Ejercicio10/solucion.xml',
+    title: "Agenda de contactos con elementos vacíos",
+    tag: "elementos vacíos",
+    desc: "Crea una <strong>agenda</strong> con al menos <strong>4 contactos</strong>. Cada contacto tiene: <code>nombre</code>, <code>telefono</code>, <code>email</code> y los elementos vacíos <code>&lt;movil /&gt;</code> y <code>&lt;fax /&gt;</code> para indicar disponibilidad de esos medios.",
+    requirements: [
+      { label: "Prólogo con encoding", detail: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" },
+      { label: "Raíz", detail: "<agenda>" },
+      { label: "≥4 contactos", detail: "<contacto>" },
+      { label: "Elementos vacíos", detail: "<movil /> y <fax />" },
+    ],
+    hint: "Un elemento vacío se escribe <movil /> o <movil></movil>. Ambas formas son equivalentes según el estándar XML.",
+    validate: {
+      minElements: ["agenda", "contacto", "nombre", "telefono", "email"],
+      minRepeat: { tag: "contacto", count: 4 },
+      needsProlog: true,
+      emptyElement: "movil",
+    }
+  },
+  {
+    id: 11,
+    solutionPath: 'XML/Ejercicio11/solucion.xml',
+    title: "Tienda de música",
+    tag: "jerarquía + atributos",
+    desc: "Crea un XML para una <strong>tienda de música</strong>. Debe tener al menos <strong>3 artistas</strong>, cada uno con atributo <code>id</code> y <code>genero</code>. Dentro de cada artista, al menos <strong>2 álbumes</strong> con: <code>titulo</code>, <code>año</code> y <code>precio</code>.",
+    requirements: [
+      { label: "Raíz", detail: "<tienda_musica>" },
+      { label: "≥3 artistas", detail: "<artista id=\"...\" genero=\"...\">" },
+      { label: "≥2 álbumes por artista", detail: "<album>" },
+      { label: "3 campos por álbum", detail: "titulo, año, precio" },
+    ],
+    hint: "Un elemento puede tener varios atributos: <artista id=\"1\" genero=\"rock\">. El orden de los atributos no importa.",
+    validate: {
+      minElements: ["tienda_musica", "artista", "album", "titulo", "año", "precio"],
+      minRepeat: { tag: "artista", count: 3 },
+      needsProlog: true,
+      attributes: [{ tag: "artista", attrs: ["id", "genero"] }],
+    }
+  },
+  {
+    id: 12,
+    solutionPath: 'XML/Ejercicio12/solucion.xml',
+    title: "Horario escolar",
+    tag: "jerarquía",
+    desc: "Crea un XML con el <strong>horario semanal</strong> de una clase. Debe tener al menos <strong>3 días</strong>. Cada día tiene un atributo <code>nombre</code> (ej: lunes) y contiene al menos <strong>3 clases</strong>. Cada clase tiene: <code>hora</code>, <code>asignatura</code> y <code>aula</code>.",
+    requirements: [
+      { label: "Raíz", detail: "<horario>" },
+      { label: "≥3 días", detail: "<dia nombre=\"...\">" },
+      { label: "≥3 clases por día", detail: "<clase>" },
+      { label: "3 campos por clase", detail: "hora, asignatura, aula" },
+    ],
+    hint: "El atributo va en la etiqueta del día: <dia nombre=\"lunes\">. Luego anida las clases dentro.",
+    validate: {
+      minElements: ["horario", "dia", "clase", "hora", "asignatura", "aula"],
+      minRepeat: { tag: "dia", count: 3 },
+      needsProlog: true,
+      attributes: [{ tag: "dia", attrs: ["nombre"] }],
+    }
+  },
+  {
+    id: 13,
+    solutionPath: 'XML/Ejercicio13/solucion.xml',
+    title: "Torneos deportivos",
+    tag: "complejo",
+    desc: "Crea un XML de <strong>torneos deportivos</strong> con al menos <strong>2 torneos</strong>. Cada torneo tiene atributo <code>id</code> y <code>deporte</code>, y los campos <code>nombre</code> y <code>sede</code>. Dentro de cada torneo, al menos <strong>3 equipos</strong>, cada equipo con: <code>nombre_equipo</code>, <code>ciudad</code> y un elemento vacío <code>&lt;clasificado /&gt;</code>.",
+    requirements: [
+      { label: "Raíz", detail: "<torneos>" },
+      { label: "≥2 torneos", detail: "<torneo id=\"...\" deporte=\"...\">" },
+      { label: "Datos del torneo", detail: "nombre, sede" },
+      { label: "≥3 equipos por torneo", detail: "<equipo>" },
+      { label: "Elemento vacío", detail: "<clasificado />" },
+    ],
+    hint: "Estructura: torneos → torneo(id, deporte) → nombre, sede, equipos → equipo → nombre_equipo, ciudad, clasificado",
+    validate: {
+      minElements: ["torneos", "torneo", "nombre", "sede", "equipos", "equipo", "nombre_equipo", "ciudad"],
+      minRepeat: { tag: "torneo", count: 2 },
+      needsProlog: true,
+      attributes: [{ tag: "torneo", attrs: ["id", "deporte"] }],
+      emptyElement: "clasificado",
+    }
+  },
+  {
+    id: 14,
+    solutionPath: 'XML/Ejercicio14/solucion.xml',
+    title: "Red de sucursales bancarias",
+    tag: "muy complejo",
+    desc: "Crea un XML de un <strong>banco</strong> con al menos <strong>3 sucursales</strong>. Cada sucursal tiene atributo <code>id</code> y <code>ciudad</code>. Dentro de cada sucursal: <code>direccion</code>, <code>telefono</code> y una lista de <code>empleados</code> con al menos <strong>2 empleados</strong>. Cada empleado tiene atributo <code>id</code> y los campos: <code>nombre</code>, <code>cargo</code>, <code>salario</code> y el elemento vacío <code>&lt;turno_noche /&gt;</code>.",
+    requirements: [
+      { label: "Raíz", detail: "<banco>" },
+      { label: "≥3 sucursales", detail: "<sucursal id=\"...\" ciudad=\"...\">" },
+      { label: "Datos de sucursal", detail: "direccion, telefono" },
+      { label: "≥2 empleados por sucursal", detail: "<empleado id=\"...\">" },
+      { label: "Datos de empleado", detail: "nombre, cargo, salario" },
+      { label: "Elemento vacío", detail: "<turno_noche />" },
+    ],
+    hint: "¡El más complejo! Ve nivel a nivel: banco → sucursal → empleados → empleado. Cuida que cada etiqueta de apertura tenga su cierre correcto.",
+    validate: {
+      minElements: ["banco", "sucursal", "direccion", "telefono", "empleados", "empleado", "nombre", "cargo", "salario"],
+      minRepeat: { tag: "sucursal", count: 3 },
+      needsProlog: true,
+      attributes: [
+        { tag: "sucursal", attrs: ["id", "ciudad"] },
+        { tag: "empleado", attrs: ["id"] },
+      ],
+      emptyElement: "turno_noche",
     }
   },
 ];

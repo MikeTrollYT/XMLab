@@ -155,4 +155,124 @@ const xsdExercises = [
       requiredAttributes: ['nombre', 'isbn'],
     }
   },
+  {
+    id: 9,
+    solutionPath: 'XSD/Ejercicio9/solucion.xsd',
+    title: 'Esquema para película con atributo',
+    tag: 'atributos',
+    desc: 'Crea un XSD para el XML de una película. El elemento raíz <code>&lt;pelicula&gt;</code> tiene el atributo <code>id</code>. Dentro: <code>titulo</code>, <code>director</code>, <code>año</code> y <code>duracion</code>.',
+    requirements: [
+      { label: 'Raíz XML', detail: '<pelicula id="...">' },
+      { label: 'Campos', detail: 'titulo, director, año, duracion' },
+      { label: 'Atributo', detail: 'id en pelicula (required)' },
+      { label: 'Esquema', detail: '<xs:schema> válido' },
+    ],
+    hint: 'Recuerda: tener atributo convierte al elemento en complexType. Declara el atributo id con use="required" después de la secuencia.',
+    sourceXml: `<?xml version="1.0" encoding="UTF-8"?>\n<pelicula id="P01">\n  <titulo>El laberinto del fauno</titulo>\n  <director>Guillermo del Toro</director>\n  <año>2006</año>\n  <duracion>118</duracion>\n</pelicula>`,
+    validate: {
+      expectedRoot: 'pelicula',
+      requiredElementNames: ['titulo', 'director', 'año', 'duracion'],
+      requiredAttributes: ['id'],
+    }
+  },
+  {
+    id: 10,
+    solutionPath: 'XSD/Ejercicio10/solucion.xsd',
+    title: 'Esquema para nota con restricción numérica',
+    tag: 'restricciones',
+    desc: 'Crea un XSD para una nota escolar. El campo <code>calificacion</code> debe ser un entero entre 0 y 10 usando <code>simpleType</code> con restricción. Los demás campos: <code>alumno</code>, <code>asignatura</code> y <code>fecha</code>.',
+    requirements: [
+      { label: 'Raíz XML', detail: '<nota>' },
+      { label: 'Campos', detail: 'alumno, asignatura, calificacion, fecha' },
+      { label: 'Restricción', detail: 'calificacion: entero entre 0 y 10' },
+      { label: 'Facetas', detail: 'minInclusive y maxInclusive' },
+    ],
+    hint: 'Define un <xs:simpleType> con <xs:restriction base="xs:integer"> y usa minInclusive value="0" y maxInclusive value="10".',
+    sourceXml: `<?xml version="1.0" encoding="UTF-8"?>\n<nota>\n  <alumno>Laura Pérez</alumno>\n  <asignatura>Historia</asignatura>\n  <calificacion>8</calificacion>\n  <fecha>2024-05-20</fecha>\n</nota>`,
+    validate: {
+      expectedRoot: 'nota',
+      requiredElementNames: ['alumno', 'asignatura', 'calificacion', 'fecha'],
+    }
+  },
+  {
+    id: 11,
+    solutionPath: 'XSD/Ejercicio11/solucion.xsd',
+    title: 'Esquema para vehículo con enumeración',
+    tag: 'restricciones + enumeración',
+    desc: 'Crea un XSD para un vehículo. El campo <code>tipo</code> solo puede tomar los valores: <em>gasolina</em>, <em>diesel</em> o <em>electrico</em>. Los demás: <code>marca</code>, <code>modelo</code> y <code>año</code>.',
+    requirements: [
+      { label: 'Raíz XML', detail: '<vehiculo>' },
+      { label: 'Campos', detail: 'marca, modelo, tipo, año' },
+      { label: 'Enumeración', detail: 'tipo: gasolina | diesel | electrico' },
+      { label: 'Faceta', detail: 'xs:enumeration' },
+    ],
+    hint: 'Define un <xs:simpleType> para tipo con <xs:restriction base="xs:string"> y tres <xs:enumeration value="..."/>.',
+    sourceXml: `<?xml version="1.0" encoding="UTF-8"?>\n<vehiculo>\n  <marca>Toyota</marca>\n  <modelo>Yaris</modelo>\n  <tipo>electrico</tipo>\n  <año>2023</año>\n</vehiculo>`,
+    validate: {
+      expectedRoot: 'vehiculo',
+      requiredElementNames: ['marca', 'modelo', 'tipo', 'año'],
+    }
+  },
+  {
+    id: 12,
+    solutionPath: 'XSD/Ejercicio12/solucion.xsd',
+    title: 'Esquema para tienda con artículos repetidos',
+    tag: 'ocurrencias',
+    desc: 'Crea un XSD para una tienda. El elemento raíz <code>&lt;tienda&gt;</code> tiene el atributo <code>nombre</code>. Dentro: <code>direccion</code>, uno o más <code>&lt;producto&gt;</code> (con <code>maxOccurs="unbounded"</code>), y <code>total_productos</code>. Cada producto tiene: <code>nombre</code> y <code>precio</code>.',
+    requirements: [
+      { label: 'Raíz XML', detail: '<tienda nombre="...">' },
+      { label: 'Atributo', detail: 'nombre en tienda (required)' },
+      { label: 'Repetición', detail: '<producto> con maxOccurs="unbounded"' },
+      { label: 'Campos producto', detail: 'nombre, precio' },
+      { label: 'Campo extra', detail: 'direccion, total_productos' },
+    ],
+    hint: 'producto es un complexType anidado con su propia sequence. Declara maxOccurs="unbounded" en el elemento producto.',
+    sourceXml: `<?xml version="1.0" encoding="UTF-8"?>\n<tienda nombre="Electro Sur">\n  <direccion>Calle Mayor 5, Almería</direccion>\n  <producto>\n    <nombre>Televisor</nombre>\n    <precio>399.99</precio>\n  </producto>\n  <producto>\n    <nombre>Tablet</nombre>\n    <precio>249.50</precio>\n  </producto>\n  <total_productos>2</total_productos>\n</tienda>`,
+    validate: {
+      expectedRoot: 'tienda',
+      requiredElementNames: ['direccion', 'producto', 'nombre', 'precio', 'total_productos'],
+      requiredAttributes: ['nombre'],
+    }
+  },
+  {
+    id: 13,
+    solutionPath: 'XSD/Ejercicio13/solucion.xsd',
+    title: 'Esquema para empleado con restricción de salario',
+    tag: 'restricciones numéricas',
+    desc: 'Crea un XSD para un empleado. Los campos son: <code>dni</code>, <code>nombre</code>, <code>departamento</code>, <code>salario</code> y <code>activo</code>. El campo <code>salario</code> debe ser decimal con valor mínimo de 1000 y máximo de 9999 usando restricción.',
+    requirements: [
+      { label: 'Raíz XML', detail: '<empleado>' },
+      { label: 'Campos', detail: 'dni, nombre, departamento, salario, activo' },
+      { label: 'Restricción', detail: 'salario: decimal entre 1000 y 9999' },
+      { label: 'Facetas', detail: 'minInclusive y maxInclusive' },
+      { label: 'Booleano', detail: 'activo: xs:boolean' },
+    ],
+    hint: 'Define un simpleType para salario con restriction base="xs:decimal". Para activo usa directamente type="xs:boolean".',
+    sourceXml: `<?xml version="1.0" encoding="UTF-8"?>\n<empleado>\n  <dni>87654321B</dni>\n  <nombre>Marta Ruiz</nombre>\n  <departamento>Ventas</departamento>\n  <salario>2200.00</salario>\n  <activo>true</activo>\n</empleado>`,
+    validate: {
+      expectedRoot: 'empleado',
+      requiredElementNames: ['dni', 'nombre', 'departamento', 'salario', 'activo'],
+    }
+  },
+  {
+    id: 14,
+    solutionPath: 'XSD/Ejercicio14/solucion.xsd',
+    title: 'Esquema para biblioteca con libros y atributos',
+    tag: 'anidamiento + atributos + ocurrencias',
+    desc: 'Crea un XSD para una biblioteca. El elemento raíz <code>&lt;biblioteca&gt;</code> tiene el atributo <code>ciudad</code>. Contiene uno o más <code>&lt;libro&gt;</code>, cada libro con atributo <code>isbn</code> y los campos: <code>titulo</code>, <code>autor</code> (puede repetirse, <code>minOccurs="0" maxOccurs="unbounded"</code>) y <code>paginas</code>.',
+    requirements: [
+      { label: 'Raíz XML', detail: '<biblioteca ciudad="...">' },
+      { label: 'Atributo raíz', detail: 'ciudad (required)' },
+      { label: 'Repetición', detail: '<libro> con maxOccurs="unbounded"' },
+      { label: 'Atributo libro', detail: 'isbn (required)' },
+      { label: 'Campos libro', detail: 'titulo, autor (0..n), paginas' },
+    ],
+    hint: '¡El más complejo! Dos niveles con atributos. Cada libro es un complexType con su sequence y su propio xs:attribute isbn.',
+    sourceXml: `<?xml version="1.0" encoding="UTF-8"?>\n<biblioteca ciudad="Almería">\n  <libro isbn="978-1111">\n    <titulo>Clean Code</titulo>\n    <autor>Robert Martin</autor>\n    <paginas>431</paginas>\n  </libro>\n  <libro isbn="978-2222">\n    <titulo>El Quijote</titulo>\n    <autor>Cervantes</autor>\n    <autor>Anónimo</autor>\n    <paginas>1345</paginas>\n  </libro>\n</biblioteca>`,
+    validate: {
+      expectedRoot: 'biblioteca',
+      requiredElementNames: ['libro', 'titulo', 'autor', 'paginas'],
+      requiredAttributes: ['ciudad', 'isbn'],
+    }
+  },
 ];

@@ -5,35 +5,35 @@ const xpathBaseXml = `<?xml version="1.0" encoding="utf-8"?>
     <titulo>Don Quijote</titulo>
     <autor>Cervantes</autor>
     <genero>Novela</genero>
-    <anio>1605</anio>
+    <año>1605</año>
     <paginas>863</paginas>
   </libro>
   <libro id="L002" disponible="no">
     <titulo>Cien años de soledad</titulo>
     <autor>García Márquez</autor>
     <genero>Novela</genero>
-    <anio>1967</anio>
+    <año>1967</año>
     <paginas>471</paginas>
   </libro>
   <libro id="L003" disponible="si">
     <titulo>1984</titulo>
     <autor>Orwell</autor>
     <genero>Distopía</genero>
-    <anio>1949</anio>
+    <año>1949</año>
     <paginas>328</paginas>
   </libro>
   <libro id="L004" disponible="no">
     <titulo>El principito</titulo>
     <autor>Saint-Exupéry</autor>
     <genero>Fábula</genero>
-    <anio>1943</anio>
+    <año>1943</año>
     <paginas>96</paginas>
   </libro>
   <libro id="L005" disponible="si">
     <titulo>Fahrenheit 451</titulo>
     <autor>Bradbury</autor>
     <genero>Distopía</genero>
-    <anio>1953</anio>
+    <año>1953</año>
     <paginas>256</paginas>
   </libro>
   <responsable>Ana López</responsable>

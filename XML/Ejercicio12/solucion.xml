@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<horario>
+    <dia nombre="lunes">
+        <clase>
+            <hora>08:00</hora>
+            <asignatura>Matematicas</asignatura>
+            <aula>A1</aula>
+        </clase>
+        <clase>
+            <hora>09:00</hora>
+            <asignatura>Lengua</asignatura>
+            <aula>A2</aula>
+        </clase>
+        <clase>
+            <hora>10:00</hora>
+            <asignatura>Ingles</asignatura>
+            <aula>B3</aula>
+        </clase>
+    </dia>
+    <dia nombre="martes">
+        <clase>
+            <hora>08:00</hora>
+            <asignatura>Historia</asignatura>
+            <aula>A1</aula>
+        </clase>
+        <clase>
+            <hora>09:00</hora>
+            <asignatura>Fisica</asignatura>
+            <aula>Lab1</aula>
+        </clase>
+        <clase>
+            <hora>10:00</hora>
+            <asignatura>Matematicas</asignatura>
+            <aula>A1</aula>
+        </clase>
+    </dia>
+    <dia nombre="miercoles">
+        <clase>
+            <hora>08:00</hora>
+            <asignatura>Ingles</asignatura>
+            <aula>B3</aula>
+        </clase>
+        <clase>
+            <hora>09:00</hora>
+            <asignatura>Lengua</asignatura>
+            <aula>A2</aula>
+        </clase>
+        <clase>
+            <hora>10:00</hora>
+            <asignatura>Educacion Fisica</asignatura>
+            <aula>Gimnasio</aula>
+        </clase>
+    </dia>
+</horario>

@@ -2,6 +2,6 @@
     <titulo>Don Quijote</titulo>
     <autor>Cervantes</autor>
     <genero>Novela</genero>
-    <anio>1605</anio>
+    <año>1605</año>
     <paginas>863</paginas>
 </libro>

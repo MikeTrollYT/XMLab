@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tienda_musica>
+    <artista id="1" genero="rock">
+        <nombre>Quevedo</nombre>
+        <album>
+            <titulo>Buenas noches</titulo>
+            <año>2024</año>
+            <precio>12.99</precio>
+        </album>
+        <album>
+            <titulo>Donde quiero estar</titulo>
+            <año>2023</año>
+            <precio>14.50</precio>
+        </album>
+    </artista>
+    <artista id="2" genero="pop">
+        <nombre>Mecano</nombre>
+        <album>
+            <titulo>Descanso dominical</titulo>
+            <año>1988</año>
+            <precio>9.99</precio>
+        </album>
+        <album>
+            <titulo>Aidalai</titulo>
+            <año>1991</año>
+            <precio>11.00</precio>
+        </album>
+    </artista>
+    <artista id="3" genero="flamenco">
+        <nombre>Camaron de la Isla</nombre>
+        <album>
+            <titulo>La leyenda del tiempo</titulo>
+            <año>1979</año>
+            <precio>15.95</precio>
+        </album>
+        <album>
+            <titulo>Como el agua</titulo>
+            <año>1981</año>
+            <precio>13.50</precio>
+        </album>
+    </artista>
+</tienda_musica>
