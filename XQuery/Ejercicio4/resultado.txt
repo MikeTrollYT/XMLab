@@ -4,3 +4,18 @@
 <producto><nombre>Mancuernas 10kg</nombre><precio>35.00</precio></producto>
 <producto><nombre>Lámpara LED</nombre><precio>22.50</precio></producto>
 <producto><nombre>Esterilla yoga</nombre><precio>18.00</precio></producto>
+
+---
+
+<nombre>Cafetera express</nombre>
+<precio>119.00</precio>
+<nombre>Teclado mecánico</nombre>
+<precio>89.95</precio>
+<nombre>Auriculares BT</nombre>
+<precio>49.99</precio>
+<nombre>Mancuernas 10kg</nombre>
+<precio>35.00</precio>
+<nombre>Lámpara LED</nombre>
+<precio>22.50</precio>
+<nombre>Esterilla yoga</nombre>
+<precio>18.00</precio>
