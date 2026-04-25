@@ -18,7 +18,7 @@ XMLab es un entorno de pruebas en el navegador diseñado para dominar las bases 
 
 ---
 
-## 📚 Módulos de Práctica (32 Ejercicios)
+## 📚 Módulos de Práctica (44 Ejercicios)
 
 El laboratorio está dividido en 4 pilares fundamentales, con 8 ejercicios incrementales cada uno:
 
