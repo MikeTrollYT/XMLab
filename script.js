@@ -1162,7 +1162,7 @@ function validateXsdLocally(code, rules) {
   const root = doc.documentElement;
   const rootName = root.localName || root.tagName;
   if (rootName !== 'schema') {
-    return { ok: false, message: 'La raíz del XSD debe ser <code>&lt;xs:schema&gt;</code>.' };
+    return { ok: false, message: 'La raíz del XSD debe ser <code>&lt;xsd:schema&gt;</code>.' };
   }
 
   const hasSchemaNs = Array.from(root.attributes).some(
@@ -1178,7 +1178,7 @@ function validateXsdLocally(code, rules) {
   );
 
   if (!allElements.length) {
-    return { ok: false, message: 'Tu XSD debe definir al menos un <code>&lt;xs:element&gt;</code>.' };
+    return { ok: false, message: 'Tu XSD debe definir al menos un <code>&lt;xsd:element&gt;</code>.' };
   }
 
   if (rules?.expectedRoot) {

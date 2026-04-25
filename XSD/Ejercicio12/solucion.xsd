@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:element name="tienda">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="direccion" type="xs:string" />
-                <xs:element name="producto" minOccurs="1" maxOccurs="unbounded">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="nombre" type="xs:string" />
-                            <xs:element name="precio" type="xs:decimal" />
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-                <xs:element name="total_productos" type="xs:integer" />
-            </xs:sequence>
-            <xs:attribute name="nombre" type="xs:string" use="required" />
-        </xs:complexType>
-    </xs:element>
-</xs:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="tienda">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="direccion" type="xsd:string" />
+                <xsd:element name="producto" minOccurs="1" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="nombre" type="xsd:string" />
+                            <xsd:element name="precio" type="xsd:decimal" />
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="total_productos" type="xsd:integer" />
+            </xsd:sequence>
+            <xsd:attribute name="nombre" type="xsd:string" use="required" />
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

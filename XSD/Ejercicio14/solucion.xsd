@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:element name="biblioteca">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="libro" minOccurs="1" maxOccurs="unbounded">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="titulo" type="xs:string" />
-                            <xs:element name="autor" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
-                            <xs:element name="paginas" type="xs:integer" />
-                        </xs:sequence>
-                        <xs:attribute name="isbn" type="xs:string" use="required" />
-                    </xs:complexType>
-                </xs:element>
-            </xs:sequence>
-            <xs:attribute name="ciudad" type="xs:string" use="required" />
-        </xs:complexType>
-    </xs:element>
-</xs:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="biblioteca">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="libro" minOccurs="1" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="titulo" type="xsd:string" />
+                            <xsd:element name="autor" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+                            <xsd:element name="paginas" type="xsd:integer" />
+                        </xsd:sequence>
+                        <xsd:attribute name="isbn" type="xsd:string" use="required" />
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+            <xsd:attribute name="ciudad" type="xsd:string" use="required" />
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

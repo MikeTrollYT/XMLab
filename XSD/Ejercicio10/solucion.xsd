@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:simpleType name="tipoCalificacion">
-        <xs:restriction base="xs:integer">
-            <xs:minInclusive value="0" />
-            <xs:maxInclusive value="10" />
-        </xs:restriction>
-    </xs:simpleType>
-    <xs:element name="nota">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="alumno" type="xs:string" />
-                <xs:element name="asignatura" type="xs:string" />
-                <xs:element name="calificacion" type="tipoCalificacion" />
-                <xs:element name="fecha" type="xs:date" />
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-</xs:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:simpleType name="tipoCalificacion">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="0" />
+            <xsd:maxInclusive value="10" />
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:element name="nota">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="alumno" type="xsd:string" />
+                <xsd:element name="asignatura" type="xsd:string" />
+                <xsd:element name="calificacion" type="tipoCalificacion" />
+                <xsd:element name="fecha" type="xsd:date" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>
