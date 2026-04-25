@@ -148,6 +148,15 @@ function updateProgress() {
   document.getElementById('prog-fill').style.width = `${(done/total)*100}%`;
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function loadExercise(idx) {
   const activeExercises = getActiveExercises();
   currentIdx = idx;
@@ -179,7 +188,7 @@ function loadExercise(idx) {
   // requirements
   const reqs = document.getElementById('ex-reqs');
   reqs.innerHTML = ex.requirements.map(r =>
-    `<span class="req-tag">${r.label}: <b>${r.detail}</b></span>`
+    `<span class="req-tag">${escapeHtml(r.label)}: <b>${escapeHtml(r.detail)}</b></span>`
   ).join('');
 
   // editor
