@@ -65,7 +65,7 @@ const xqueryExercises = [
       { label: 'Salida', detail: 'elementos item con nombre y precio' },
       { label: 'FLWOR', detail: 'for where return' },
     ],
-    hint: 'Filtra por atributo categoria y construye <item>{...}</item>.',
+    hint: 'Filtra por atributo categoria y construye <item>{$nombre} {$precio}</item> o con ($nombre, $precio)',
     sourceXml: xqueryBaseXml,
   },
   {

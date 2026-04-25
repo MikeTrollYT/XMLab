@@ -671,7 +671,10 @@ function tryExtractXmlTextContent(value) {
 }
 
 function normalizeResultEntry(value) {
-  return String(value || '').replace(/\s+/g, ' ').trim();
+  return String(value || '')
+    .replace(/>\s+</g, '><')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 function parseExpectedResultEntries(rawText) {
@@ -1108,11 +1111,101 @@ function evaluateXQueryExpressionRaw(expr, env, xmlDoc) {
     return [Number(avg.toFixed(2)).toString()];
   }
 
+  // Sequence expression, e.g. ($p/nombre, $p/precio)
+  if (s.startsWith('(') && s.endsWith(')')) {
+    const inner = s.slice(1, -1).trim();
+    if (!inner) {
+      return [];
+    }
+
+    const parts = splitTopLevelByComma(inner);
+    const out = [];
+    for (const part of parts) {
+      const value = evaluateXQueryExpressionRaw(part, env, xmlDoc);
+      if (Array.isArray(value)) {
+        out.push(...value);
+      } else {
+        out.push(value);
+      }
+    }
+    return out;
+  }
+
   if (/^<\w+>[\s\S]*<\/\w+>$/.test(s)) {
     return [renderXQueryElementConstructor(s, env, xmlDoc)];
   }
 
+  // In XQuery, enclosed expressions {...} are only valid inside constructors.
+  if (s.includes('{') || s.includes('}')) {
+    throw new Error('invalid enclosed expression');
+  }
+
   return evaluateXQuerySequence(s, env, xmlDoc);
+}
+
+function splitTopLevelByComma(source) {
+  const parts = [];
+  let depthParen = 0;
+  let depthBrace = 0;
+  let depthBracket = 0;
+  let quote = '';
+  let start = 0;
+
+  for (let i = 0; i < source.length; i++) {
+    const ch = source[i];
+
+    if (quote) {
+      if (ch === quote) {
+        quote = '';
+      }
+      continue;
+    }
+
+    if (ch === '"' || ch === "'") {
+      quote = ch;
+      continue;
+    }
+
+    if (ch === '(') {
+      depthParen += 1;
+      continue;
+    }
+    if (ch === ')') {
+      depthParen -= 1;
+      continue;
+    }
+    if (ch === '{') {
+      depthBrace += 1;
+      continue;
+    }
+    if (ch === '}') {
+      depthBrace -= 1;
+      continue;
+    }
+    if (ch === '[') {
+      depthBracket += 1;
+      continue;
+    }
+    if (ch === ']') {
+      depthBracket -= 1;
+      continue;
+    }
+
+    if (ch === ',' && depthParen === 0 && depthBrace === 0 && depthBracket === 0) {
+      const part = source.slice(start, i).trim();
+      if (part) {
+        parts.push(part);
+      }
+      start = i + 1;
+    }
+  }
+
+  const last = source.slice(start).trim();
+  if (last) {
+    parts.push(last);
+  }
+
+  return parts;
 }
 
 function evaluateXQuerySequence(expr, env, xmlDoc) {
@@ -1125,6 +1218,10 @@ function evaluateXQuerySequence(expr, env, xmlDoc) {
   }
 
   if (s.startsWith('"') && s.endsWith('"')) {
+    return [s.slice(1, -1)];
+  }
+
+  if (s.startsWith("'") && s.endsWith("'")) {
     return [s.slice(1, -1)];
   }
 
@@ -1254,7 +1351,31 @@ function evaluateXQueryScalar(expr, env, xmlDoc) {
   if (!seq.length) {
     return '';
   }
-  return xqueryItemToString(seq[0]);
+  return xqueryItemToAtomic(seq[0]);
+}
+
+function xqueryItemToAtomic(item) {
+  if (item == null) {
+    return '';
+  }
+
+  if (typeof item === 'string' || typeof item === 'number' || typeof item === 'boolean') {
+    return String(item);
+  }
+
+  if (item.nodeType === Node.ATTRIBUTE_NODE) {
+    return String(item.value || '').trim();
+  }
+
+  if (item.nodeType === Node.TEXT_NODE) {
+    return String(item.textContent || '').trim();
+  }
+
+  if (item.nodeType === Node.ELEMENT_NODE) {
+    return String(item.textContent || '').trim();
+  }
+
+  return xqueryItemToString(item);
 }
 
 function indexOfWord(source, word) {
