@@ -930,20 +930,102 @@ function evaluateXQueryExpression(xqueryCode, sourceXml) {
 
   try {
     const normalized = xqueryCode.replace(/\r/g, '').trim();
+    validateXQuerySyntaxBasics(normalized);
     const entries = runMiniXQuery(normalized, doc);
     return { ok: true, entries: entries.map((v) => String(v).trim()).filter(Boolean) };
   } catch (e) {
+    const detail = e?.message || 'Error de sintaxis.';
+    const hasLine = Number.isInteger(e?.xqLine) && Number.isInteger(e?.xqColumn);
+    const location = hasLine ? ` (linea ${e.xqLine}, columna ${e.xqColumn})` : '';
     return {
       ok: false,
-      message: 'Consulta XQuery no válida para el evaluador del curso. Revisa sintaxis FLWOR, count(), avg(), if/then/else y distinct-values().'
+      message: `Consulta XQuery no valida: ${detail}${location}`
     };
   }
+}
+
+function validateXQuerySyntaxBasics(query) {
+  if (!query) {
+    throw createXQuerySyntaxError('Escribe una consulta XQuery.', query, 0);
+  }
+
+  const returnIdx = indexOfWord(query, 'return');
+  if (returnIdx < 0) {
+    throw createXQuerySyntaxError('Falta la clausula return.', query, Math.max(query.length - 1, 0));
+  }
+
+  const stack = [];
+  let quote = '';
+
+  for (let i = 0; i < query.length; i++) {
+    const ch = query[i];
+
+    if (quote) {
+      if (ch === quote) {
+        quote = '';
+      }
+      continue;
+    }
+
+    if (ch === '"' || ch === "'") {
+      quote = ch;
+      continue;
+    }
+
+    if (ch === '(' || ch === '{' || ch === '[') {
+      stack.push({ ch, i });
+      continue;
+    }
+
+    if (ch === ')' || ch === '}' || ch === ']') {
+      const expected = ch === ')' ? '(' : ch === '}' ? '{' : '[';
+      const top = stack.pop();
+      if (!top || top.ch !== expected) {
+        throw createXQuerySyntaxError(`Cierre inesperado '${ch}'.`, query, i);
+      }
+    }
+  }
+
+  if (quote) {
+    throw createXQuerySyntaxError('Comilla sin cerrar en la consulta.', query, query.length - 1);
+  }
+
+  if (stack.length) {
+    const open = stack[stack.length - 1];
+    throw createXQuerySyntaxError(`Falta cerrar '${open.ch}'.`, query, open.i);
+  }
+}
+
+function createXQuerySyntaxError(message, source, index) {
+  const err = new Error(message);
+  const loc = getLineColumnFromIndex(source || '', index || 0);
+  err.xqLine = loc.line;
+  err.xqColumn = loc.column;
+  return err;
+}
+
+function getLineColumnFromIndex(source, index) {
+  const safeSource = String(source || '');
+  const safeIndex = Math.max(0, Math.min(index, safeSource.length));
+  let line = 1;
+  let column = 1;
+
+  for (let i = 0; i < safeIndex; i++) {
+    if (safeSource[i] === '\n') {
+      line += 1;
+      column = 1;
+    } else {
+      column += 1;
+    }
+  }
+
+  return { line, column };
 }
 
 function runMiniXQuery(query, xmlDoc) {
   const returnIdx = indexOfWord(query, 'return');
   if (returnIdx < 0) {
-    throw new Error('missing return');
+    throw createXQuerySyntaxError('Falta la clausula return.', query, Math.max(query.length - 1, 0));
   }
 
   const prefix = query.slice(0, returnIdx).trim();
@@ -959,10 +1041,10 @@ function runMiniXQuery(query, xmlDoc) {
   }
 
   if (!prefix.toLowerCase().startsWith('for ')) {
-    throw new Error('unsupported query');
+    throw createXQuerySyntaxError('La consulta debe empezar con for ... return o let ... return.', query, 0);
   }
 
-  const forParsed = parseForClause(prefix);
+  const forParsed = parseForClause(prefix, query);
   let rows = evaluateXQuerySequence(forParsed.inExpr, {}, xmlDoc).map((item) => ({ [forParsed.varName]: item }));
 
   if (forParsed.letPart) {
@@ -997,7 +1079,7 @@ function runMiniXQuery(query, xmlDoc) {
 function parseForClause(prefix) {
   const forMatch = prefix.match(/^for\s+\$(\w+)\s+in\s+([\s\S]+?)(?=\s+(?:let|where|order\s+by)\b|$)([\s\S]*)$/i);
   if (!forMatch) {
-    throw new Error('invalid for clause');
+    throw createXQuerySyntaxError('Clausula for invalida. Usa: for $var in ruta ... return ...', prefix, 0);
   }
 
   let rest = (forMatch[3] || '').trim();
@@ -1041,7 +1123,7 @@ function evaluateLetClauses(letCode, baseEnv, xmlDoc) {
   for (const part of parts) {
     const m = part.match(/^\$(\w+)\s*:=\s*([\s\S]+)$/);
     if (!m) {
-      throw new Error('invalid let clause');
+      throw createXQuerySyntaxError('Clausula let invalida. Usa: let $var := expresion', letCode, 0);
     }
     const value = evaluateXQueryExpressionRaw(m[2].trim(), env, xmlDoc);
     env[m[1]] = value;
