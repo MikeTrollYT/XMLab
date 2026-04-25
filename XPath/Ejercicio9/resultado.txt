@@ -1,0 +1,15 @@
+<libro id="L002" disponible="no">
+  <titulo>Cien años de soledad</titulo>
+  <autor>García Márquez</autor>
+  <genero>Novela</genero>
+  <año>1967</año>
+  <paginas>471</paginas>
+</libro>
+
+<libro id="L005" disponible="si">
+  <titulo>Fahrenheit 451</titulo>
+  <autor>Bradbury</autor>
+  <genero>Distopía</genero>
+  <año>1953</año>
+  <paginas>256</paginas>
+</libro>

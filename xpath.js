@@ -118,11 +118,11 @@ const xpathExercises = [
     tag: 'posición',
     desc: 'Obtén el título del segundo libro del catálogo usando la función de posición.',
     requirements: [
-      { label: 'Función', detail: 'position()' },
+      { label: 'Función', detail: '[posicion]' },
       { label: 'Índice', detail: '2' },
       { label: 'Salida', detail: 'titulo' },
     ],
-    hint: 'Filtra libro por position()=2 y luego baja a titulo.',
+    hint: 'Filtra libro por [2] y luego baja a titulo.',
     sourceXml: xpathBaseXml,
   },
   {
@@ -151,6 +151,20 @@ const xpathExercises = [
       { label: 'Salida', detail: 'todos los nodos paginas' },
     ],
     hint: 'Usa el eje de descendencia global con doble slash.',
+    sourceXml: xpathBaseXml,
+  },
+  {
+    id: 9,
+    expectedResultPath: 'XPath/Ejercicio9/resultado.txt',
+    title: 'Libros posteriores a 1950',
+    tag: 'comparaciones numéricas',
+    desc: 'Obtén todos los libros cuyo año sea mayor que 1950.',
+    requirements: [
+      { label: 'Filtro', detail: 'año > 1950' },
+      { label: 'Ruta', detail: 'usa un predicado sobre libro' },
+      { label: 'Resultado', detail: 'nodos libro completos' },
+    ],
+    hint: 'Usa un predicado con comparación numérica sobre el hijo año.',
     sourceXml: xpathBaseXml,
   },
 ];

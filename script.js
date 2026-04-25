@@ -332,17 +332,18 @@ async function checkExercise() {
         : 'Tu XML coincide con la estructura esperada del ejercicio (etiquetas, orden y atributos).'
     );
   } catch (e) {
+    const reason = escapeHtml(e?.message || String(e || 'Error desconocido'));
     showFeedback(
       'warn',
       '⚠',
       'No se pudo validar contra archivo',
       currentSection === 'xsd'
-        ? 'No se pudo cargar el XSD de referencia del ejercicio. Revisa la ruta configurada y que estés ejecutando el proyecto con un servidor local.'
+        ? `No se pudo cargar el XSD de referencia del ejercicio. Revisa la ruta configurada y que estés ejecutando el proyecto con un servidor local.<br><br><small>Detalle técnico: ${reason}</small>`
         : currentSection === 'xpath'
-          ? 'No se pudo cargar el resultado esperado de XPath. Revisa la ruta configurada y que estés ejecutando el proyecto con un servidor local.'
+          ? `No se pudo cargar el resultado esperado de XPath. Revisa la ruta configurada y que estés ejecutando el proyecto con un servidor local.<br><br><small>Detalle técnico: ${reason}</small>`
           : currentSection === 'xquery'
-            ? 'No se pudo cargar el resultado esperado de XQuery. Revisa la ruta configurada y que estés ejecutando el proyecto con un servidor local.'
-        : 'No se pudo cargar el XML de referencia del ejercicio. Revisa que exista el archivo en la ruta configurada y que estés ejecutando el proyecto con un servidor local.'
+            ? `No se pudo cargar el resultado esperado de XQuery. Revisa la ruta configurada y que estés ejecutando el proyecto con un servidor local.<br><br><small>Detalle técnico: ${reason}</small>`
+          : `No se pudo cargar el XML de referencia del ejercicio. Revisa que exista el archivo en la ruta configurada y que estés ejecutando el proyecto con un servidor local.<br><br><small>Detalle técnico: ${reason}</small>`
     );
   } finally {
     setLoading(false);
@@ -442,93 +443,211 @@ async function validateAgainstReferenceXsd(userXsdCode, referencePath) {
 }
 
 async function validateAgainstReferenceXPath(userXPath, referencePath, sourceXml) {
-  if (!referencePath) {
-    return { ok: false, message: 'Este ejercicio no tiene ruta de referencia configurada.' };
-  }
+  try {
+    if (!referencePath) {
+      return { ok: false, message: 'Este ejercicio no tiene ruta de referencia configurada.' };
+    }
 
-  const response = await fetch(referencePath, { cache: 'no-store' });
-  if (!response.ok) {
-    return {
-      ok: false,
-      message: `No se encontró el archivo de referencia: <code>${referencePath}</code>.`
-    };
-  }
-
-  const expectedRaw = (await response.text()).trim();
-  if (!expectedRaw) {
-    return { ok: false, message: `El resultado esperado está vacío en <code>${referencePath}</code>.` };
-  }
-
-  const userEval = evaluateXPathExpression(userXPath, sourceXml);
-  if (!userEval.ok) {
-    return { ok: false, message: userEval.message };
-  }
-
-  const userSerialized = serializeXPathEntries(userEval.entries);
-  const expectedSerialized = serializeXPathEntries(parseExpectedResultEntries(expectedRaw));
-
-  if (userSerialized.length !== expectedSerialized.length) {
-    return {
-      ok: false,
-      message: `La consulta devuelve <b>${userSerialized.length}</b> resultados y se esperaban <b>${expectedSerialized.length}</b>.`
-    };
-  }
-
-  for (let i = 0; i < expectedSerialized.length; i++) {
-    if (userSerialized[i] !== expectedSerialized[i]) {
+    const response = await fetch(referencePath, { cache: 'no-store' });
+    if (!response.ok) {
       return {
         ok: false,
-        message: 'El resultado de tu consulta no coincide con el resultado esperado.'
+        message: `No se encontró el archivo de referencia: <code>${referencePath}</code>.`
       };
     }
-  }
 
-  return { ok: true };
+    const expectedRaw = (await response.text()).trim();
+    if (!expectedRaw) {
+      return { ok: false, message: `El resultado esperado está vacío en <code>${referencePath}</code>.` };
+    }
+
+    const userEval = evaluateXPathExpression(userXPath, sourceXml);
+    if (!userEval.ok) {
+      return { ok: false, message: userEval.message };
+    }
+
+    const userSerialized = serializeXPathEntries(userEval.entries);
+    const expectedVariants = parseExpectedResultVariants(expectedRaw)
+      .map((entries) => serializeXPathEntries(entries));
+
+    if (!expectedVariants.length) {
+      return { ok: false, message: `No se pudieron interpretar resultados esperados en <code>${referencePath}</code>.` };
+    }
+
+    if (matchSerializedEntriesAgainstVariants(userSerialized, expectedVariants)) {
+      return { ok: true };
+    }
+
+    const expectedLengths = [...new Set(expectedVariants.map((variant) => variant.length))];
+    if (!expectedLengths.includes(userSerialized.length)) {
+      const expectedCountLabel = expectedLengths.length === 1
+        ? `<b>${expectedLengths[0]}</b>`
+        : `<b>${expectedLengths.join(', ')}</b>`;
+      return {
+        ok: false,
+        message: `La consulta devuelve <b>${userSerialized.length}</b> resultados y se esperaban ${expectedCountLabel}.`
+      };
+    }
+
+    return {
+      ok: false,
+      message: 'El resultado de tu consulta no coincide con ninguno de los resultados esperados.'
+    };
+  } catch (e) {
+    const reason = escapeHtml(e?.message || String(e || 'Error desconocido'));
+    return {
+      ok: false,
+      message: `Error interno al validar XPath de referencia.<br><small>Detalle técnico: ${reason}</small>`
+    };
+  }
 }
 
 async function validateAgainstReferenceXQuery(userXQuery, referencePath, sourceXml) {
-  if (!referencePath) {
-    return { ok: false, message: 'Este ejercicio no tiene ruta de referencia configurada.' };
-  }
+  try {
+    if (!referencePath) {
+      return { ok: false, message: 'Este ejercicio no tiene ruta de referencia configurada.' };
+    }
 
-  const response = await fetch(referencePath, { cache: 'no-store' });
-  if (!response.ok) {
-    return {
-      ok: false,
-      message: `No se encontró el archivo de referencia: <code>${referencePath}</code>.`
-    };
-  }
-
-  const expectedRaw = (await response.text()).trim();
-  if (!expectedRaw) {
-    return { ok: false, message: `El resultado esperado está vacío en <code>${referencePath}</code>.` };
-  }
-
-  const userEval = evaluateXQueryExpression(userXQuery, sourceXml);
-  if (!userEval.ok) {
-    return { ok: false, message: userEval.message };
-  }
-
-  const userSerialized = serializeXPathEntries(userEval.entries);
-  const expectedSerialized = serializeXPathEntries(parseExpectedResultEntries(expectedRaw));
-
-  if (userSerialized.length !== expectedSerialized.length) {
-    return {
-      ok: false,
-      message: `La consulta devuelve <b>${userSerialized.length}</b> resultados y se esperaban <b>${expectedSerialized.length}</b>.`
-    };
-  }
-
-  for (let i = 0; i < expectedSerialized.length; i++) {
-    if (userSerialized[i] !== expectedSerialized[i]) {
+    const response = await fetch(referencePath, { cache: 'no-store' });
+    if (!response.ok) {
       return {
         ok: false,
-        message: 'El resultado de tu consulta no coincide con el resultado esperado.'
+        message: `No se encontró el archivo de referencia: <code>${referencePath}</code>.`
       };
+    }
+
+    const expectedRaw = (await response.text()).trim();
+    if (!expectedRaw) {
+      return { ok: false, message: `El resultado esperado está vacío en <code>${referencePath}</code>.` };
+    }
+
+    const userEval = evaluateXQueryExpression(userXQuery, sourceXml);
+    if (!userEval.ok) {
+      return { ok: false, message: userEval.message };
+    }
+
+    const userSerialized = serializeXPathEntries(userEval.entries);
+    const expectedVariants = parseExpectedResultVariants(expectedRaw)
+      .map((entries) => serializeXPathEntries(entries));
+
+    if (!expectedVariants.length) {
+      return { ok: false, message: `No se pudieron interpretar resultados esperados en <code>${referencePath}</code>.` };
+    }
+
+    if (matchSerializedEntriesAgainstVariants(userSerialized, expectedVariants)) {
+      return { ok: true };
+    }
+
+    const expectedLengths = [...new Set(expectedVariants.map((variant) => variant.length))];
+    if (!expectedLengths.includes(userSerialized.length)) {
+      const expectedCountLabel = expectedLengths.length === 1
+        ? `<b>${expectedLengths[0]}</b>`
+        : `<b>${expectedLengths.join(', ')}</b>`;
+      return {
+        ok: false,
+        message: `La consulta devuelve <b>${userSerialized.length}</b> resultados y se esperaban ${expectedCountLabel}.`
+      };
+    }
+
+    return {
+      ok: false,
+      message: 'El resultado de tu consulta no coincide con ninguno de los resultados esperados.'
+    };
+  } catch (e) {
+    const reason = escapeHtml(e?.message || String(e || 'Error desconocido'));
+    return {
+      ok: false,
+      message: `Error interno al validar XQuery de referencia.<br><small>Detalle técnico: ${reason}</small>`
+    };
+  }
+}
+
+function parseExpectedResultVariants(rawText) {
+  const separators = /^\s*(?:---+|===+)\s*$/m;
+  if (!separators.test(rawText)) {
+    return [parseExpectedResultEntries(rawText)];
+  }
+
+  return rawText
+    .split(/^\s*(?:---+|===+)\s*$/gm)
+    .map((chunk) => parseExpectedResultEntries(chunk))
+    .filter((variant) => variant.length > 0);
+}
+
+function matchSerializedEntriesAgainstVariants(userSerialized, expectedVariants) {
+  for (const expectedSerialized of expectedVariants) {
+    if (userSerialized.length !== expectedSerialized.length) {
+      continue;
+    }
+
+    let allMatch = true;
+    for (let i = 0; i < expectedSerialized.length; i++) {
+      if (!areResultEntriesEquivalent(userSerialized[i], expectedSerialized[i])) {
+        allMatch = false;
+        break;
+      }
+    }
+
+    if (allMatch) {
+      return true;
     }
   }
 
-  return { ok: true };
+  return false;
+}
+
+function areResultEntriesEquivalent(a, b) {
+  const formsA = getComparableEntryForms(a);
+  const formsB = getComparableEntryForms(b);
+  for (const value of formsA) {
+    if (formsB.has(value)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function getComparableEntryForms(entry) {
+  const forms = new Set();
+  const normalized = normalizeResultEntry(entry);
+  forms.add(normalized);
+
+  const xmlText = tryExtractXmlTextContent(normalized);
+  if (xmlText) {
+    forms.add(xmlText);
+  }
+
+  return forms;
+}
+
+function tryExtractXmlTextContent(value) {
+  if (!value || !value.includes('<') || !value.includes('>')) {
+    return null;
+  }
+
+  const parser = new DOMParser();
+  const wrapped = `<root>${value}</root>`;
+  const doc = parser.parseFromString(wrapped, 'application/xml');
+  const parseErr = doc.querySelector('parsererror');
+  if (parseErr) {
+    return null;
+  }
+
+  const root = doc.documentElement;
+  const elementChildren = Array.from(root.childNodes).filter((node) => node.nodeType === Node.ELEMENT_NODE);
+  const nonEmptyTextNodes = Array.from(root.childNodes).filter(
+    (node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim()
+  );
+
+  if (elementChildren.length !== 1 || nonEmptyTextNodes.length > 0) {
+    return null;
+  }
+
+  return normalizeResultEntry(elementChildren[0].textContent || '');
+}
+
+function normalizeResultEntry(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
 function parseExpectedResultEntries(rawText) {
