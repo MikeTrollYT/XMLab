@@ -167,4 +167,18 @@ const xpathExercises = [
     hint: 'Usa un predicado con comparación numérica sobre el hijo año.',
     sourceXml: xpathBaseXml,
   },
+  {
+    id: 10,
+    expectedResultPath: 'XPath/Ejercicio10/resultado.txt',
+    title: 'Autor con libro extenso no disponible',
+    tag: 'condiciones compuestas',
+    desc: 'Muestra todos los autores que tengan libros con más de 400 páginas y que no estén disponibles.',
+    requirements: [
+      { label: 'Condición 1', detail: 'paginas > 400' },
+      { label: 'Condición 2', detail: 'disponible = no' },
+      { label: 'Resultado', detail: 'elementos autor' },
+    ],
+    hint: 'Filtra primero los libro con dos condiciones en el mismo predicado y luego selecciona autor.',
+    sourceXml: xpathBaseXml,
+  },
 ];
