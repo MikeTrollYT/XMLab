@@ -121,7 +121,7 @@ const exercises = [
     solutionPath: 'XML/Ejercicio7/solucion.xml',
     title: "Menú de restaurante",
     tag: "jerarquía + atributos",
-    desc: "Crea el menú de un <strong>restaurante</strong>. Debe tener al menos <strong>2 secciones</strong> (ej: <em>entrantes</em>, <em>principales</em>). Cada sección tiene un atributo <code>tipo</code> y contiene al menos <strong>3 platos</strong>. Cada plato: <code>nombre</code>, <code>descripcion</code>, <code>precio</code>, y el atributo <code>vegetariano</code> con valor <code>si</code> o <code>no</code>.",
+    desc: "Crea el <strong>menú</strong> de un restaurante. Debe tener al menos <strong>2 secciones</strong> (ej: <em>entrantes</em>, <em>principales</em>). Cada sección tiene un atributo <code>tipo</code> y contiene al menos <strong>3 platos</strong>. Cada plato: <code>nombre</code>, <code>descripcion</code>, <code>precio</code>, y el atributo <code>vegetariano</code> con valor <code>si</code> o <code>no</code>.",
     requirements: [
       { label: "Raíz", detail: "<menu>" },
       { label: "≥2 secciones", detail: "<seccion tipo=\"...\">" },
