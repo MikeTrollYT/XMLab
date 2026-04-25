@@ -21,6 +21,7 @@
   "author": "MikeTroll",
   "license": "MIT",
   "homepage": "https://github.com/MikeTrollYT/XMLab#readme",
-  "devDependencies": {},
-  "dependencies": {}
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  }
 }
