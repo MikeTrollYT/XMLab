@@ -101,7 +101,7 @@ const xqueryExercises = [
     expectedResultPath: 'XQuery/Ejercicio5/resultado.txt',
     title: 'Estado por stock',
     tag: 'if then else',
-    desc: 'Recorre todos los productos y devuelve su nombre junto con una etiqueta estado que diga Bajo stock si stock<20 o Disponible en caso contrario.',
+    desc: 'Recorre todos los productos y devuelve su nombre junto con una etiqueta estado que diga "Bajo stock" si stock<20 o "Disponible" en caso contrario.',
     requirements: [
       { label: 'Condición', detail: 'if ($p/stock < 20)' },
       { label: 'Salida', detail: 'producto con nombre y estado' },

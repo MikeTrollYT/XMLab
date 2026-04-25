@@ -4,3 +4,12 @@
 <producto><nombre>Cafetera express</nombre><estado>Bajo stock</estado></producto>
 <producto><nombre>Esterilla yoga</nombre><estado>Disponible</estado></producto>
 <producto><nombre>Mancuernas 10kg</nombre><estado>Disponible</estado></producto>
+
+---
+
+<estado>Disponible</estado>
+<estado>Bajo stock</estado>
+<estado>Disponible</estado>
+<estado>Bajo stock</estado>
+<estado>Disponible</estado>
+<estado>Disponible</estado>
