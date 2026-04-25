@@ -66,6 +66,17 @@
     localStorage.setItem(storageKeys.mode, state.mode);
   }
 
+  function updateQueryPlaceholder() {
+    const { queryInput } = getElements();
+    if (!queryInput) {
+      return;
+    }
+
+    queryInput.placeholder = state.mode === 'xquery'
+      ? 'for $a in doc("example.xml")/...'
+      : '/root/...';
+  }
+
   function insertSoftTab(event) {
     if (event.key !== 'Tab') {
       return;
@@ -158,6 +169,7 @@
     if (modeSelect) {
       modeSelect.value = state.mode;
     }
+    updateQueryPlaceholder();
     if (result) {
       result.textContent = 'Aqui aparecera el resultado de la consulta.';
     }
@@ -179,6 +191,7 @@
     if (modeSelect) {
       modeSelect.value = state.mode;
     }
+    updateQueryPlaceholder();
     if (resultTitle) {
       resultTitle.textContent = 'Resultado';
     }
@@ -220,6 +233,7 @@
     modeSelect.addEventListener('change', () => {
       state.mode = modeSelect.value;
       persistState();
+      updateQueryPlaceholder();
       validateSyntax();
     });
 

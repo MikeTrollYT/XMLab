@@ -118,7 +118,7 @@ function updateSectionUi() {
     xpathResultPanel.hidden = false;
     xpathResultPanel.style.display = 'flex';
     queryResultTitle.textContent = 'Resultado XQuery';
-    editor.placeholder = 'for $p in doc("tienda.xml")//...';
+    editor.placeholder = 'for $p in doc("tienda.xml")/...';
   } else if (currentSection === 'xpath') {
     sidebarTitle.textContent = 'XPath — Ejercicios';
     sidebarSub.textContent = 'Consultas y selección de nodos';
