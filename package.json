@@ -1,0 +1,26 @@
+{
+  "name": "xmlab",
+  "version": "1.0.0",
+  "description": "XMLab - Learn XML, XSD, XPath & XQuery interactively",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MikeTrollYT/XMLab.git"
+  },
+  "keywords": [
+    "xml",
+    "xsd",
+    "xpath",
+    "xquery",
+    "learning",
+    "education"
+  ],
+  "author": "MikeTroll",
+  "license": "MIT",
+  "homepage": "https://github.com/MikeTrollYT/XMLab#readme",
+  "devDependencies": {},
+  "dependencies": {}
+}
