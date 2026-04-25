@@ -66,12 +66,16 @@ function updateSectionUi() {
   const navXsd = document.getElementById('nav-xsd');
   const navXpath = document.getElementById('nav-xpath');
   const navXquery = document.getElementById('nav-xquery');
+  const navPlayground = document.getElementById('nav-playground');
   const sidebarTitle = document.getElementById('sidebar-title');
   const sidebarSub = document.getElementById('sidebar-sub');
   const sourcePanel = document.getElementById('source-panel');
   const xpathResultPanel = document.getElementById('xpath-result-panel');
   const queryResultTitle = document.getElementById('query-result-title');
   const editor = document.getElementById('editor');
+  const appBody = document.querySelector('.app-body');
+  const playgroundPanel = document.getElementById('playground-panel');
+  const progressBarHeader = document.querySelector('.progress-bar-header');
 
   document.body.dataset.section = currentSection;
 
@@ -79,6 +83,26 @@ function updateSectionUi() {
   navXsd.classList.toggle('active', currentSection === 'xsd');
   navXpath.classList.toggle('active', currentSection === 'xpath');
   navXquery.classList.toggle('active', currentSection === 'xquery');
+  if (navPlayground) {
+    navPlayground.classList.toggle('active', currentSection === 'playground');
+  }
+
+  if (appBody && playgroundPanel) {
+    const inPlayground = currentSection === 'playground';
+    appBody.classList.toggle('playground-only', inPlayground);
+    playgroundPanel.hidden = !inPlayground;
+    if (progressBarHeader) {
+      progressBarHeader.style.display = inPlayground ? 'none' : 'flex';
+    }
+  }
+
+  if (currentSection === 'playground') {
+    closeFeedback();
+    if (window.playgroundController && typeof window.playgroundController.onSectionEnter === 'function') {
+      window.playgroundController.onSectionEnter();
+    }
+    return;
+  }
 
   if (currentSection === 'xsd') {
     sidebarTitle.textContent = 'XSD — Ejercicios';
@@ -1419,7 +1443,7 @@ function closeFeedback() {
 }
 
 function switchSection(sec) {
-  if (sec !== 'xml' && sec !== 'xsd' && sec !== 'xpath' && sec !== 'xquery') {
+  if (sec !== 'xml' && sec !== 'xsd' && sec !== 'xpath' && sec !== 'xquery' && sec !== 'playground') {
     return;
   }
 
@@ -1428,6 +1452,12 @@ function switchSection(sec) {
   }
 
   currentSection = sec;
+
+  if (sec === 'playground') {
+    updateSectionUi();
+    return;
+  }
+
   currentIdx = 0;
   updateSectionUi();
   renderSidebar();

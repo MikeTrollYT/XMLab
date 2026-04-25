@@ -170,6 +170,116 @@ nav button.locked {
     overflow: hidden;
 }
 
+.app-body.playground-only aside,
+.app-body.playground-only main {
+    display: none;
+}
+
+.playground-panel {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.playground-panel[hidden] {
+    display: none !important;
+}
+
+.playground-head {
+    padding: 20px 28px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.playground-grid {
+    flex: 1;
+    min-height: 0;
+    padding: 20px 28px;
+    display: grid;
+    gap: 14px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 340px;
+}
+
+.playground-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.playground-query-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+}
+
+.playground-query-head .source-title {
+    border-bottom: 0;
+    background: transparent;
+}
+
+.playground-select {
+    margin-right: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface3);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    border-radius: 6px;
+    padding: 4px 8px;
+    outline: none;
+}
+
+.playground-textarea {
+    flex: 1;
+    min-height: 0;
+}
+
+.playground-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 28px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
+}
+
+.play-status {
+    font-size: 13px;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+.play-status.ok {
+    color: var(--ok);
+    border-color: rgba(79, 255, 176, .35);
+}
+
+.play-status.err {
+    color: var(--err);
+    border-color: rgba(255, 106, 106, .35);
+}
+
+.play-status.warn {
+    color: var(--warn);
+    border-color: rgba(255, 192, 106, .35);
+}
+
 /* ─── SIDEBAR ─── */
 aside {
     width: var(--sidebar-w);
@@ -597,6 +707,11 @@ body[data-section="xquery"] .xpath-result-panel {
     .xpath-result-panel {
         width: 100%;
         max-height: 220px;
+    }
+
+    .playground-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(170px, 1fr) minmax(170px, 1fr) minmax(170px, 1fr);
     }
 }
 
