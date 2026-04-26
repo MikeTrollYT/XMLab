@@ -16,6 +16,11 @@ const userCodeBySection = {
   xquery: {},
 };
 
+const queryResultBySection = {
+  xpath: {},
+  xquery: {},
+};
+
 // ─── INIT ────────────────────────────────────────────────────────────────────
 function init() {
   updateSectionUi();
@@ -207,6 +212,8 @@ function loadExercise(idx) {
 
   if (currentSection !== 'xpath' && currentSection !== 'xquery') {
     clearXPathResultPanel();
+  } else {
+    restoreStoredQueryResult(idx);
   }
 
   // requirements
@@ -271,6 +278,10 @@ function resetEditor() {
   userCodeBySection[currentSection][currentIdx] = '';
   document.getElementById('editor').value = '';
   updateLineNums();
+  if (currentSection === 'xpath' || currentSection === 'xquery') {
+    delete queryResultBySection[currentSection][currentIdx];
+    clearXPathResultPanel();
+  }
   closeFeedback();
 }
 
@@ -1479,6 +1490,13 @@ function indexOfWord(source, word) {
 function renderXPathResult(entries, errorMessage) {
   const body = document.getElementById('xpath-result-body');
   const count = document.getElementById('xpath-result-count');
+  const sectionResults = queryResultBySection[currentSection];
+  if (sectionResults) {
+    sectionResults[currentIdx] = {
+      entries: Array.isArray(entries) ? [...entries] : [],
+      errorMessage: errorMessage ? String(errorMessage) : '',
+    };
+  }
 
   if (errorMessage) {
     body.textContent = errorMessage;
@@ -1494,6 +1512,22 @@ function renderXPathResult(entries, errorMessage) {
 
   body.textContent = entries.join('\n\n');
   count.textContent = String(entries.length);
+}
+
+function restoreStoredQueryResult(idx) {
+  const sectionResults = queryResultBySection[currentSection];
+  if (!sectionResults) {
+    clearXPathResultPanel();
+    return;
+  }
+
+  const saved = sectionResults[idx];
+  if (!saved) {
+    clearXPathResultPanel();
+    return;
+  }
+
+  renderXPathResult(saved.entries || [], saved.errorMessage || '');
 }
 
 function clearXPathResultPanel() {
