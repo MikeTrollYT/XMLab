@@ -1,0 +1,7 @@
+let $p := doc("tienda.xml")//producto/precio/text()
+return <precioMedio>{avg($p)}</precioMedio>
+
+---
+
+let $p := doc("tienda.xml")//producto/precio/text()
+return avg($p)

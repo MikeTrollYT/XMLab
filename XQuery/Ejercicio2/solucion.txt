@@ -1,0 +1,17 @@
+for $p in doc("tienda.xml")//producto
+let $nombre := $p/nombre
+let $precio := $p/precio
+where $p/@categoria = 'electronica'
+return 
+  <item>
+    {$nombre}
+    {$precio}
+  </item>
+
+---
+
+for $p in doc("tienda.xml")//producto
+let $nombre := $p/nombre
+let $precio := $p/precio
+where $p/@categoria = 'electronica'
+return ($nombre, $precio)

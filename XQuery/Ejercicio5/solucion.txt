@@ -1,0 +1,35 @@
+for $p in doc("tienda.xml")//producto
+let $nombre := $p/nombre
+let $stock := $p/stock
+return 
+  <producto> {$nombre}
+    {
+      if ($stock < 20)
+      then <estado>Bajo stock</estado>
+      else <estado>Disponible</estado>
+    }
+  </producto>
+
+---
+
+for $p in doc("tienda.xml")//producto
+let $stock := $p/stock
+return 
+  if ($stock < 20)
+  then <estado>Bajo stock</estado>
+  else <estado>Disponible</estado>
+
+
+
+
+---
+
+for $p in doc("tienda.xml")//producto
+let $nombre := $p/nombre
+let $stock := $p/stock
+return (
+  $nombre,
+  if ($stock < 20)
+  then <estado>Bajo stock</estado>
+  else <estado>Disponible</estado>
+)

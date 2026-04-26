@@ -1,0 +1,7 @@
+for $c in distinct-values(doc("tienda.xml")//producto/@categoria)
+return <categoria>{$c}</categoria>
+
+---
+
+for $c in distinct-values(doc("tienda.xml")//producto/@categoria)
+return $c

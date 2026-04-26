@@ -1,4 +1,15 @@
-<resultado><nombre>Teclado mecánico</nombre><valoracion>4.7</valoracion></resultado>
-<resultado><nombre>Cafetera express</nombre><valoracion>4.5</valoracion></resultado>
-<resultado><nombre>Mancuernas 10kg</nombre><valoracion>4.3</valoracion></resultado>
-<resultado><nombre>Auriculares BT</nombre><valoracion>4.2</valoracion></resultado>
+<producto><nombre>Teclado mecánico</nombre><valoracion>4.7</valoracion></producto>
+<producto><nombre>Cafetera express</nombre><valoracion>4.5</valoracion></producto>
+<producto><nombre>Mancuernas 10kg</nombre><valoracion>4.3</valoracion></producto>
+<producto><nombre>Auriculares BT</nombre><valoracion>4.2</valoracion></producto>
+
+---
+
+<nombre>Teclado mecánico</nombre>
+<valoracion>4.7</valoracion>
+<nombre>Cafetera express</nombre>
+<valoracion>4.5</valoracion>
+<nombre>Mancuernas 10kg</nombre>
+<valoracion>4.3</valoracion>
+<nombre>Auriculares BT</nombre>
+<valoracion>4.2</valoracion>

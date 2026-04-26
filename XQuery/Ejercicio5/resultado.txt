@@ -13,3 +13,18 @@
 <estado>Bajo stock</estado>
 <estado>Disponible</estado>
 <estado>Disponible</estado>
+
+---
+
+<nombre>Auriculares BT</nombre>
+<estado>Disponible</estado>
+<nombre>Teclado mecánico</nombre>
+<estado>Bajo stock</estado>
+<nombre>Lámpara LED</nombre>
+<estado>Disponible</estado>
+<nombre>Cafetera express</nombre>
+<estado>Bajo stock</estado>
+<nombre>Esterilla yoga</nombre>
+<estado>Disponible</estado>
+<nombre>Mancuernas 10kg</nombre>
+<estado>Disponible</estado>

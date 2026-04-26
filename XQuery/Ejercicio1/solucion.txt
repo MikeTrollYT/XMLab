@@ -1,0 +1,2 @@
+for $p in doc("tienda.xml")//producto
+return $p/nombre

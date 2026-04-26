@@ -1,0 +1,15 @@
+for $p in doc("tienda.xml")//producto
+let $nombre := $p/nombre
+let $valoracion := $p/valoracion
+where $valoracion > 4.0
+order by $valoracion descending
+return <producto>{($nombre, $valoracion)}</producto>
+
+---
+
+for $p in doc("tienda.xml")//producto
+let $nombre := $p/nombre
+let $valoracion := $p/valoracion
+where $valoracion > 4.0
+order by $valoracion descending
+return ($nombre, $valoracion)

@@ -1,0 +1,17 @@
+for $p in doc("tienda.xml")//producto
+let $nombre := $p/nombre
+let $precio := $p/precio
+order by $precio descending
+return 
+  <producto>
+    {$nombre}
+    {$precio}
+  </producto>
+
+---
+
+for $p in doc("tienda.xml")//producto
+let $nombre := $p/nombre
+let $precio := $p/precio
+order by $precio descending
+return ($nombre, $precio)

@@ -1,0 +1,2 @@
+let $p := doc("tienda.xml")//producto
+return count($p)
