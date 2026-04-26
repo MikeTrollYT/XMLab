@@ -180,7 +180,7 @@ const xsdExercises = [
     solutionPath: 'XSD/Ejercicio10/solucion.xsd',
     title: 'Esquema para nota con restricción numérica',
     tag: 'restricciones',
-    desc: 'Crea un XSD para una nota escolar. El campo <code>calificacion</code> debe ser un entero entre 0 y 10 usando <code>simpleType</code> con restricción. Los demás campos: <code>alumno</code>, <code>asignatura</code> y <code>fecha</code>.',
+    desc: 'Crea un XSD para una nota escolar. El campo <code>calificacion</code> debe ser un entero entre 0 y 10 usando <code>simpleType</code> ("tipoCalificacion") con restricción. Los demás campos: <code>alumno</code>, <code>asignatura</code> y <code>fecha</code>.',
     requirements: [
       { label: 'Raíz XML', detail: '<nota>' },
       { label: 'Campos', detail: 'alumno, asignatura, calificacion, fecha' },
@@ -199,7 +199,7 @@ const xsdExercises = [
     solutionPath: 'XSD/Ejercicio11/solucion.xsd',
     title: 'Esquema para vehículo con enumeración',
     tag: 'restricciones + enumeración',
-    desc: 'Crea un XSD para un vehículo. El campo <code>tipo</code> solo puede tomar los valores: <em>gasolina</em>, <em>diesel</em> o <em>electrico</em>. Los demás: <code>marca</code>, <code>modelo</code> y <code>año</code>.',
+    desc: 'Crea un XSD para un vehículo. El campo <code>tipo</code> solo puede tomar los valores: <em>gasolina</em>, <em>diesel</em> o <em>electrico</em> ("tipoCombustible"). Los demás: <code>marca</code>, <code>modelo</code> y <code>año</code>.',
     requirements: [
       { label: 'Raíz XML', detail: '<vehiculo>' },
       { label: 'Campos', detail: 'marca, modelo, tipo, año' },
@@ -239,7 +239,7 @@ const xsdExercises = [
     solutionPath: 'XSD/Ejercicio13/solucion.xsd',
     title: 'Esquema para empleado con restricción de salario',
     tag: 'restricciones numéricas',
-    desc: 'Crea un XSD para un empleado. Los campos son: <code>dni</code>, <code>nombre</code>, <code>departamento</code>, <code>salario</code> y <code>activo</code>. El campo <code>salario</code> debe ser decimal con valor mínimo de 1000 y máximo de 9999 usando restricción.',
+    desc: 'Crea un XSD para un empleado. Los campos son: <code>dni</code>, <code>nombre</code>, <code>departamento</code>, <code>salario</code> y <code>activo</code>. El campo <code>salario</code> debe ser decimal con valor mínimo de 1000 y máximo de 9999 usando restricción ("tipoSalario").',
     requirements: [
       { label: 'Raíz XML', detail: '<empleado>' },
       { label: 'Campos', detail: 'dni, nombre, departamento, salario, activo' },
