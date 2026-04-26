@@ -156,7 +156,7 @@ const xqueryExercises = [
     id: 9,
     expectedResultPath: 'XQuery/Ejercicio9/resultado.txt',
     title: 'Producto con más stock',
-    tag: 'let + max + where',
+    tag: 'let + max',
     desc: 'Obtén el producto que tiene el stock más alto usando la función max(). Devuelve el stock del producto.',
     requirements: [
       { label: 'Función', detail: 'max() sobre los stocks' },
