@@ -1193,6 +1193,16 @@ function evaluateXQueryExpressionRaw(expr, env, xmlDoc) {
     return [Number(avg.toFixed(2)).toString()];
   }
 
+  const maxMatch = s.match(/^max\(([^]+)\)$/i);
+  if (maxMatch) {
+    const nums = evaluateXQuerySequence(maxMatch[1].trim(), env, xmlDoc).map((v) => Number(xqueryItemToAtomic(v)));
+    const validNums = nums.filter((n) => !Number.isNaN(n));
+    if (!validNums.length) {
+      return ['NaN'];
+    }
+    return [String(Math.max(...validNums))];
+  }
+
   // Sequence expression, e.g. ($p/nombre, $p/precio)
   if (s.startsWith('(') && s.endsWith(')')) {
     const inner = s.slice(1, -1).trim();

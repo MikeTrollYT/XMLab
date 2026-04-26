@@ -1,0 +1,12 @@
+let $stock := doc("tienda.xml")//producto/stock
+return <stock>{max($stock)}</stock>
+
+---
+
+let $stock := doc("tienda.xml")//producto/stock
+return max($stock)
+
+---
+
+let $stock := max(doc("tienda.xml")//producto/stock)
+return $stock

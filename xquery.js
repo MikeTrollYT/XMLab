@@ -152,4 +152,18 @@ const xqueryExercises = [
     hint: 'Itera el resultado de distinct-values(...) y construye <categoria>{$cat}</categoria>.',
     sourceXml: xqueryBaseXml,
   },
+  {
+    id: 9,
+    expectedResultPath: 'XQuery/Ejercicio9/resultado.txt',
+    title: 'Producto con más stock',
+    tag: 'let + max + where',
+    desc: 'Obtén el producto que tiene el stock más alto usando la función max(). Devuelve el stock del producto.',
+    requirements: [
+      { label: 'Función', detail: 'max() sobre los stocks' },
+      { label: 'Filtro', detail: 'where para quedarte con el stock máximo' },
+      { label: 'Salida', detail: 'numero stock' },
+    ],
+    hint: 'Guarda el máximo con let $stock := doc("tienda.xml")//producto/stock y luego devuelve return max($stock) ',
+    sourceXml: xqueryBaseXml,
+  },
 ];

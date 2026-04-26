@@ -1,0 +1,5 @@
+<producto><stock>60</stock></producto>
+
+---
+
+60
