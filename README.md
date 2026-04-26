@@ -18,7 +18,7 @@ XMLab es un entorno de pruebas en el navegador diseñado para dominar las bases 
 
 ---
 
-## 📚 Módulos de Práctica (44 Ejercicios)
+## 📚 Módulos de Práctica (47 Ejercicios)
 
 El laboratorio está dividido en 4 pilares fundamentales, con 8 ejercicios incrementales cada uno:
 
@@ -43,5 +43,4 @@ El código está escrito de forma modular utilizando **HTML5, CSS3 y Vanilla Jav
 
 ## 👨‍💻 Autoría
 
-Desarrollado con ☕ por [MikeTroll](https://miketroll.me).  
-*Hecho para sobrevivir a Lenguajes de Marcas en 1º DAW.*
+Desarrollado con ☕ por [MikeTroll](https://miketroll.me).
