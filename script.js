@@ -28,7 +28,7 @@ function init() {
   loadExercise(0);
   const editor = document.getElementById('editor');
   editor.addEventListener('input', onEditorInput);
-  editor.addEventListener('keydown', handleTab);
+  editor.addEventListener('keydown', handleEditorKeydown);
   editor.addEventListener('scroll', syncLineNumsScroll);
 }
 
@@ -226,6 +226,7 @@ function loadExercise(idx) {
   const editor = document.getElementById('editor');
   editor.value = userCodeBySection[currentSection][idx] ?? '';
   updateLineNums();
+  updateIndentGuides();
 
   // nav buttons
   document.getElementById('btn-prev').disabled = idx === 0;
@@ -242,6 +243,7 @@ function loadExercise(idx) {
 function onEditorInput() {
   userCodeBySection[currentSection][currentIdx] = document.getElementById('editor').value;
   updateLineNums();
+  updateIndentGuides();
 }
 
 function updateLineNums() {
@@ -255,15 +257,119 @@ function syncLineNumsScroll() {
   const editor = document.getElementById('editor');
   const lineNums = document.getElementById('line-nums');
   lineNums.scrollTop = editor.scrollTop;
+  syncIndentGuidesScroll();
 }
 
-function handleTab(e) {
+function syncIndentGuidesScroll() {
+  const editor = document.getElementById('editor');
+  const guides = document.getElementById('indent-guides');
+  if (!editor || !guides) {
+    return;
+  }
+
+  guides.style.transform = `translate(${-editor.scrollLeft}px, ${-editor.scrollTop}px)`;
+}
+
+function updateIndentGuides() {
+  const guides = document.getElementById('indent-guides');
+  const editor = document.getElementById('editor');
+  if (!guides || !editor) {
+    return;
+  }
+
+  guides.innerHTML = '';
+
+  if (currentSection !== 'xml' && currentSection !== 'xsd') {
+    syncIndentGuidesScroll();
+    return;
+  }
+
+  const value = editor.value || '';
+  if (!value) {
+    syncIndentGuidesScroll();
+    return;
+  }
+
+  const styles = getComputedStyle(editor);
+  const lineHeight = parseFloat(styles.lineHeight) || 21;
+  const paddingTop = parseFloat(styles.paddingTop) || 0;
+  const paddingLeft = parseFloat(styles.paddingLeft) || 0;
+  const fontSize = parseFloat(styles.fontSize) || 13;
+  const tabSize = parseInt(styles.tabSize || '2', 10) || 2;
+  const tabPx = fontSize * 0.61 * tabSize;
+
+  const lines = value.split('\n');
+  const indentByLine = lines.map((line) => {
+    if (!line.trim()) {
+      return 0;
+    }
+    const leading = (line.match(/^[\t ]*/) || [''])[0];
+    const columns = leading.split('').reduce((acc, ch) => acc + (ch === '\t' ? tabSize : 1), 0);
+    return Math.floor(columns / tabSize);
+  });
+
+  const maxLevel = Math.max(...indentByLine, 0);
+  if (!maxLevel) {
+    syncIndentGuidesScroll();
+    return;
+  }
+
+  for (let level = 1; level <= maxLevel; level += 1) {
+    let start = -1;
+    for (let i = 0; i <= indentByLine.length; i += 1) {
+      const hasLevel = i < indentByLine.length && indentByLine[i] >= level;
+      if (hasLevel && start === -1) {
+        start = i;
+        continue;
+      }
+
+      if (!hasLevel && start !== -1) {
+        const end = i - 1;
+        const segment = document.createElement('div');
+        segment.className = 'indent-guide-segment';
+        segment.style.left = `${paddingLeft + level * tabPx}px`;
+        segment.style.top = `${paddingTop + start * lineHeight + 2}px`;
+        segment.style.height = `${Math.max(2, (end - start + 1) * lineHeight - 4)}px`;
+        guides.appendChild(segment);
+        start = -1;
+      }
+    }
+  }
+
+  syncIndentGuidesScroll();
+}
+
+function handleEditorKeydown(e) {
   if (e.key === 'Tab') {
     e.preventDefault();
     const ta = e.target;
     const s = ta.selectionStart, end = ta.selectionEnd;
     ta.value = ta.value.substring(0,s) + '  ' + ta.value.substring(end);
     ta.selectionStart = ta.selectionEnd = s + 2;
+    onEditorInput();
+    return;
+  }
+
+  // Keep indentation level on the next line for XML/XSD editors.
+  if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
+    if (currentSection !== 'xml' && currentSection !== 'xsd') {
+      return;
+    }
+
+    e.preventDefault();
+    const ta = e.target;
+    const s = ta.selectionStart;
+    const end = ta.selectionEnd;
+    const content = ta.value;
+
+    const lineStart = content.lastIndexOf('\n', s - 1) + 1;
+    const linePrefix = content.slice(lineStart, s);
+    const indent = (linePrefix.match(/^[\t ]*/) || [''])[0];
+    const insertion = `\n${indent}`;
+
+    ta.value = content.slice(0, s) + insertion + content.slice(end);
+    const caretPos = s + insertion.length;
+    ta.selectionStart = ta.selectionEnd = caretPos;
     onEditorInput();
   }
 }
