@@ -205,7 +205,7 @@ const exercises = [
     solutionPath: 'XML/Ejercicio11/solucion.xml',
     title: "Tienda de música",
     tag: "jerarquía + atributos",
-    desc: "Crea un XML para una <strong>tienda de música</strong>. Debe tener al menos <strong>3 artistas</strong>, cada uno con atributo <code>id</code> y <code>genero</code>. Dentro de cada artista, al menos <strong>2 álbumes</strong> con: <code>titulo</code>, <code>año</code> y <code>precio</code>.",
+    desc: "Crea un XML para una <strong>tienda de música</strong>. Debe tener al menos <strong>3 artistas</strong>, cada uno con atributo <code>id</code> y <code>genero</code>. Dentro de cada artista tiene un atributo <code>nombre</code> y al menos <strong>2 álbumes</strong> con: <code>titulo</code>, <code>año</code> y <code>precio</code>.",
     requirements: [
       { label: "Raíz", detail: "<tienda_musica>" },
       { label: "≥3 artistas", detail: "<artista id=\"...\" genero=\"...\">" },
